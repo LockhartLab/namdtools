@@ -1,17 +1,12 @@
-https://github.com/sunhwan/NAMD-replica
-https://github.com/bio-phys/MDBenchmark
-
-
-
-PyNAMD
-======
+NAMDtools
+=========
 a Python interface to NAMD
 
 <!--*master:*-->
 <span style="white-space: nowrap;">
-    <a href="https://travis-ci.com/github/LockhartLab/simlib"><img src="https://img.shields.io/pypi/v/namdtools" /></a>
-    <a href="https://travis-ci.com/github/LockhartLab/simlib"><img src="https://img.shields.io/travis/com/lockhartlab/namdtools/master" /></a>
-    <a href="https://codecov.io/gh/LockhartLab/simlib"><img src="https://img.shields.io/codecov/c/github/lockhartlab/namdtools/master" /></a>
+    <a href="https://travis-ci.com/github/LockhartLab/namdtools"><img src="https://img.shields.io/pypi/v/namdtools" /></a>
+    <a href="https://travis-ci.com/github/LockhartLab/namdtools"><img src="https://img.shields.io/travis/com/lockhartlab/namdtools/master" /></a>
+    <a href="https://codecov.io/gh/LockhartLab/namdtools"><img src="https://img.shields.io/codecov/c/github/lockhartlab/namdtools/master" /></a>
 </span>
 
 <hr>
@@ -25,7 +20,8 @@ yet, install simply by calling ```pip install namdtools```
 
 <hr>
 
-```python
-from namdtools import namd2
-namd2()
-```
+Related Packages
+----------------
+https://github.com/sunhwan/NAMD-replica
+https://github.com/bio-phys/MDBenchmark
+https://github.com/radakb/pynamd/

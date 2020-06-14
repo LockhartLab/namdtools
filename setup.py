@@ -15,9 +15,13 @@ version_dict = dict([element.split(': ') for element in data])
 # Convert the version_data to a string
 version = '.'.join([str(version_dict[key]) for key in ['major', 'minor', 'patch']])
 
+# Read in long description
+with open('README.md', 'r') as stream:
+    long_description = stream.read()
+
 # Read in requirements.txt
-with open('requirements.txt', 'r') as f:
-    requirements = f.read().splitlines()
+with open('requirements.txt', 'r') as stream:
+    requirements = stream.read().splitlines()
 
 # Setup
 setup(
@@ -25,9 +29,9 @@ setup(
     version=version,
     author='C. Lockhart',
     author_email='chris@lockhartlab.org',
-    description='A toolkit for molecular dynamics simulations',
-    long_description='A toolkit for molecular dynamics simulations',
-    long_description_content_type='text/x-rst',
+    description='A Python interface to NAMD',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url="https://www.lockhartlab.org",
     packages=[
         'namdtools',
