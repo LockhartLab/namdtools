@@ -183,7 +183,6 @@ class NAMD:
         # Return pid
         return self._process.pid
 
-    @property
     def poll(self):
         """
         Check if NAMD is still running.
@@ -344,10 +343,11 @@ def _compile_namd_executable(strict=True):
             cmd.append(str(arg))
 
     # Add namd to command
+    # TODO also look in current directory
     if options.namd_path is None:
         Warning('what kind of monster sets options.namd to None?')
         options.namd = 'namd'
-    cmd.append(_first_available([options.namd_path, 'namd.exe', 'namd']) if strict else options.namd_path)
+    cmd.append(_first_available([options.namd_path, 'namd2.exe', 'namd2']) if strict else options.namd_path)
     for arg in options.namd_args:
         cmd.append(str(arg))
 
