@@ -9,11 +9,8 @@ author: C. Lockhart <chris@lockhartlab.org>
 
 """
 
-import sys
-this = sys.modules[__name__]
+charmrun_path = None
+namd_path = 'namd'
 
-this.charmrun_path = None
-this.namd_path = 'namd'
-
-this.charmrun_args = []
-this.namd_args = []
+charmrun_args = []
+namd_args = []

@@ -71,32 +71,33 @@ class NAMD:
     """
 
     # Initialize class instance
-    def __init__(self, configuration_file=None, log_file=None, executable=None, wait=True):
+    def __init__(self, configuration_path=None, log_path=None, executable=None, wait=True):
         """
         Initialize the NAMD runner.
 
         Parameters
         ----------
-        configuration : str or NAMDConfiguration
-            (Optional) NAMD configuration. If str, the name of the configuration file for processing.
-        log : str
+        configuration_path : str
+            (Optional) Path to NAMD configuration.
+        log_path : str
             (Optional) Path to log file.
         executable : str or list
-            (Optional) NAMD executable for command line.
+            (Optional) NAMD executable for command line. This will be built if not provided.
         wait : bool
             Should we wait for the NAMD job to finish? Or should it run in the background? (Default: True)
         """
 
-        # Set the NAMD configuration
-        self._configuration_file = None
-        if configuration_file is not None:
-            self.configuration = configuration_file
+        # Set the NAMD configuration path
+        self._configuration_path = None
+        if configuration_path is not None:
+            self.configuration_path = configuration_path
 
-        # Set the log file
-        self._log_file = None
-        if log_file is not None:
-            # log_file = os.path.splitext(self._configuration_file)[0] + '.log'
-            self.log_file = log_file
+        # Set the log path
+        self._log_path = None
+        if configuration_path is not None and log_path is None:
+            log_path = os.path.splitext(configuration_path)[0] + '.log'
+        if log_path is not None:
+            self.log_path = log_path
 
         # Set the NAMD executable
         self._executable = None
@@ -105,47 +106,58 @@ class NAMD:
         else:
             self.executable = _compile_namd_executable()
 
+        # Job monitoring variables
         self._wait = bool(wait)
         self._process = None
 
+    # Get the configuration path
     @property
-    def configuration_file(self):
+    def configuration_path(self):
         """
-        Get the NAMD configuration.
+        Get the NAMD configuration path.
 
         Returns
         -------
-        NAMDConfiguration
-            NAMD configuration.
+        str
+            NAMD configuration path.
         """
 
-        return self._configuration
+        return self._configuration_path
 
-    @configuration_file.setter
-    def configuration_file(self, configuration_file):
+    # Set the configuration path
+    @configuration_path.setter
+    def configuration_path(self, configuration_path):
         """
+        Set the NAMD configuration path.
 
         Parameters
         ----------
-        configuration
+        configuration_path : str
+            NAMD configuration path.
+        """
+
+        # Check that the configuration file exists
+        if not os.path.exists(configuration_path):
+            raise AttributeError('%s does not exist' % configuration_path)
+
+        # Set the path
+        self._configuration_path = configuration_path
+
+    # Get the NAMD executable
+    @property
+    def executable(self):
+        """
+        Get the NAMD executable with options.
 
         Returns
         -------
-
+        str or list
+            NAMD executable with options.
         """
 
-        if not isinstance(configuration_file, str):
-            raise AttributeError('must be string')
-
-        # if not isinstance(configuration, NAMDConfiguration):
-        #     raise AttributeError('must be instance of NAMD configuration')
-
-        self._configuration_file = configuration_file
-
-    @property
-    def executable(self):
         return self._executable
 
+    # Set the NAMD executable
     @executable.setter
     def executable(self, executable):
         """
@@ -164,7 +176,7 @@ class NAMD:
 
     @property
     def pid(self):
-        # Is job started?
+        # Has the job started?
         if self._process is None:
             raise NAMDError('job not found')
 
@@ -229,8 +241,22 @@ class NAMD:
         else:
             pass
 
-    def status(self):
-        pass
+    # Is the NAMD job successful?
+    @property
+    def success(self):
+        # Pull the status from the return code
+        status = self.poll()
+
+        # If status == 0, the job completed successfully
+        if status == 0:
+            status = 0
+
+        # Otherwise, we were not successful
+        elif status is not None:
+            status = False
+
+        # Return if successful
+        return status
 
 
 # Run namd on configuration file and write to log file
@@ -253,13 +279,15 @@ def run_namd(configuration_file, log_file, wait=True):
         Instance of NAMD controller.
     """
 
-    # Create NAMD instance and start it
+    # Create NAMD instance
     job = NAMD(configuration_file, log_file, wait=wait)
+
+    # Start NAMD
     job.start()
 
     # Was run successful?
-    # if not job.success:
-    #     raise NAMDError('failed to successfully complete')
+    if not job.success:
+        raise NAMDError('failed to successfully complete')
 
     # Return
     return job
@@ -317,7 +345,7 @@ def _compile_namd_executable(strict=True):
 
     # Add namd to command
     if options.namd_path is None:
-        Warning('who set options.namd to None?')
+        Warning('what kind of monster sets options.namd to None?')
         options.namd = 'namd'
     cmd.append(_first_available([options.namd_path, 'namd.exe', 'namd']) if strict else options.namd_path)
     for arg in options.namd_args:

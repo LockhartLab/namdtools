@@ -1,6 +1,0 @@
-glovebox
-numpy
-pandas
-typelike
-hypothesis
-numba
