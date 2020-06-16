@@ -219,7 +219,7 @@ class NAMD:
             raise NAMDError('NAMD already running')
 
         # Open output file and run
-        with open(self.log, 'w') as stream:
+        with open(self._log_path, 'w') as stream:
             self._process = Popen(self._executable.append(self._configuration_path), stdout=stream)
 
         # Should we wait?
