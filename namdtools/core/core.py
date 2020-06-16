@@ -17,7 +17,6 @@ from namdtools.exceptions import NAMDError
 import namdtools.options as options
 
 import os
-import pandas as pd
 from subprocess import Popen
 
 
@@ -221,7 +220,7 @@ class NAMD:
 
         # Open output file and run
         with open(self.log, 'w') as stream:
-            self._process = Popen(self._executable.append(self._configuration_file), stdout=stream)
+            self._process = Popen(self._executable.append(self._configuration_path), stdout=stream)
 
         # Should we wait?
         if self._wait:
@@ -294,6 +293,8 @@ def run_namd(configuration_file, log_file, wait=True):
 
 # Extract energy from log file
 def extract_energy(log_file):
+    import pandas as pd
+
     # Initialize DataFrame information
     columns = None
     records = []
