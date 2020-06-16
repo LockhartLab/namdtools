@@ -94,7 +94,7 @@ class NAMD:
         # Set the log path
         self._log_path = None
         if configuration_path is not None and log_path is None:
-            log_path = os.path.splitext(configuration_path)[0] + '.log'
+            self.log_path = os.path.splitext(configuration_path)[0] + '.log'
         if log_path is not None:
             self.log_path = log_path
 
@@ -199,14 +199,18 @@ class NAMD:
         pass
 
     @property
-    def log(self):
+    def log_path(self):
         """
         Logfile
         Returns
         -------
 
         """
-        pass
+        return self._log_path
+    
+    @log_path.setter
+    def log_path(self, log_path):
+        self._log_path = log_path
 
     # Start simulations
     def start(self):
