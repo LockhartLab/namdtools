@@ -168,9 +168,15 @@ class NAMD:
             NAMD command to run through subprocess.
         """
 
-        if not isinstance(executable, (str, list)):
+        # If executable is a string, crudely split it to list
+        if isinstance(executable, str):
+            executable = executable.split()
+
+        # Make sure we have a list
+        if not isinstance(executable, list):
             raise AttributeError('must be string or list')
 
+        # Set the executable
         self._executable = executable
 
     @property
@@ -207,7 +213,7 @@ class NAMD:
 
         """
         return self._log_path
-    
+
     @log_path.setter
     def log_path(self, log_path):
         self._log_path = log_path
@@ -224,7 +230,7 @@ class NAMD:
 
         # Open output file and run
         with open(self._log_path, 'w') as stream:
-            self._process = Popen(self._executable.append(self._configuration_path), stdout=stream)
+            self._process = Popen(self._executable + [self._configuration_path], stdout=stream)
 
         # Should we wait?
         if self._wait:
