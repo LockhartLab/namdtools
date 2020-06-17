@@ -201,10 +201,6 @@ class NAMD:
         return None if self._process is None else self._process.poll()
 
     @property
-    def log_(self):
-        pass
-
-    @property
     def log_path(self):
         """
         Logfile
@@ -329,14 +325,9 @@ def read_configuration(path):
 
 
 # Compile namd command
-def _compile_namd_executable(strict=True):
+def _compile_namd_executable():
     """
     Compile namd executable to run through subprocess.
-
-    Parameters
-    ----------
-    strict : bool
-        Flag to indicate if we should strictly check that charmrun and namd executables exist.
 
     Returns
     -------
@@ -349,7 +340,12 @@ def _compile_namd_executable(strict=True):
 
     # Add charmrun to command
     if options.charmrun_path is not None:
-        cmd.append(_first_available([options.charmrun_path, 'charmrun']) if strict else options.charmrun_path)
+        paths = [
+            options.charmrun_path,
+            os.path.join(os.getcwd(), 'charmrun'),
+            'charmrun'
+        ]
+        cmd.append(_first_available(paths))
         for arg in options.charmrun_args:
             cmd.append(str(arg))
 
@@ -358,7 +354,14 @@ def _compile_namd_executable(strict=True):
     if options.namd_path is None:
         Warning('what kind of monster sets options.namd to None?')
         options.namd = 'namd'
-    cmd.append(_first_available([options.namd_path, 'namd2.exe', 'namd2']) if strict else options.namd_path)
+    paths = [
+        options.namd,
+        os.path.join(os.getcwd(), 'namd2'),
+        os.path.join(os.getcwd(), 'namd2.exe'),
+        'namd2',
+        'namd2.exe'
+    ]
+    cmd.append(_first_available(paths))
     for arg in options.namd_args:
         cmd.append(str(arg))
 
