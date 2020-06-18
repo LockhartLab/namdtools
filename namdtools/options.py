@@ -23,10 +23,10 @@ charmrun_path = None
 this.charmrun_path = charmrun_path
 
 namd_path = 'namd2'
-this.namd_path = namd2_path
+this.namd_path = namd_path
 
 charmrun_args = []
 this.charmrun_args = charmrun_args
 
 namd_args = []
-this.namd_args = namd_rgs
+this.namd_args = namd_args

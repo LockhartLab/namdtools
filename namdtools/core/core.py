@@ -355,7 +355,7 @@ def _compile_namd_executable():
         Warning('what kind of monster sets options.namd to None?')
         options.namd = 'namd'
     paths = [
-        options.namd,
+        options.namd_path,
         os.path.join(os.getcwd(), 'namd2'),
         os.path.join(os.getcwd(), 'namd2.exe'),
         'namd2',
