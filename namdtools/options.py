@@ -19,14 +19,22 @@ this = sys.modules[__name__]
 #     'namd_args'
 # ]
 
+# Should we use charmrun?
+use_charmrun = False
+this.use_charmrun = use_charmrun
+
+# charmrun path
 charmrun_path = None
 this.charmrun_path = charmrun_path
 
-namd_path = 'namd2'
-this.namd_path = namd_path
-
+# charmrun args
 charmrun_args = []
 this.charmrun_args = charmrun_args
 
+# namd path
+namd_path = 'namd2'
+this.namd_path = namd_path
+
+# namd args
 namd_args = []
 this.namd_args = namd_args

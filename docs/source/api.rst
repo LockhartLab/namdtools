@@ -6,3 +6,4 @@ API Reference
    :maxdepth: 1
 
    api/core
+   api/io

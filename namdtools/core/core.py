@@ -339,29 +339,25 @@ def _compile_namd_executable():
     cmd = []
 
     # Add charmrun to command
-    if options.charmrun_path is not None:
-        paths = [
+    if options.use_charmrun:
+        cmd.append(_first_available([
             options.charmrun_path,
             os.path.join(os.getcwd(), 'charmrun'),
             'charmrun'
-        ]
-        cmd.append(_first_available(paths))
+        ]))
         for arg in options.charmrun_args:
             cmd.append(str(arg))
 
     # Add namd to command
-    # TODO also look in current directory
     if options.namd_path is None:
-        Warning('what kind of monster sets options.namd to None?')
-        options.namd = 'namd'
-    paths = [
+        raise NAMDError('what kind of monster sets options.namd to None?')
+    cmd.append(_first_available([
         options.namd_path,
         os.path.join(os.getcwd(), 'namd2'),
         os.path.join(os.getcwd(), 'namd2.exe'),
         'namd2',
         'namd2.exe'
-    ]
-    cmd.append(_first_available(paths))
+    ]))
     for arg in options.namd_args:
         cmd.append(str(arg))
 
