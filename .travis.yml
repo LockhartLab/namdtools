@@ -42,8 +42,8 @@ jobs:
             secure: xzI/qXbXVycEMDvZrKQViQle0h6q79s04eqUGUkyYOqSmgJObVJq1DkQ6rGmwVGH6J/l8fC5pg9fLN1E89G1m9DOn+mz9D+gn6zXkUw5JF8gFdaGqeHOjDUx3Bc8tH6bPRz3fVOZHNXxS+91S7G0DArLLy84dHOvjbSADTOQ/tzu4l4yBX+I4KpIcHLbZPrJc5oiezm1Z1+l1kMHKRfAU7sSfqIOs0qarcjWR3K0jOiFxRurMG5QSeVyWU7Q89kPJtqSBFC6ZCuRbRuya6yIe+Y+0z0y4oLwplCID0OcZi7cVY0pYeFaeOezvxZAmnReYDE9+q8ObRoc6ONKksRqjhJ9pZexsA4tO+kKKFj/DrFqw7i4aDWZFQhCbRQk9n7OKnolyCyvmtzaf0MVidA+nRRD4f5nWowWljWc7lRqWSt21k6beNMdH0Hp7R2Dzrj8cY59F6sVmF6JD7nXWZirDhDzZCTDwi8z/jS27DTR+T2v5/gF4La8CUmzfuZpwzQ2lPvZ0M6EY9MlcarNY0p35gaFdVzF7FyxibIbsHcrHbQZH/lxKjJ10i5CqXUIz2BcDTQ+JOSGjsNMs/1bhxsUE37jhgSTRiPntFBxAo2Xlip5GNqUzLjMWld1ClTjSf2aiyvHWydheu3pXnhN7Lc243xPFyXbDihWrkRgjY4iH38=
           twine_check: true
           skip_cleanup: true
-          on:
-            tags: true
+#          on:
+#            tags: true
 
 notifications:
   email:
