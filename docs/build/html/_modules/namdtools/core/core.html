@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>namdtools.core.core &#8212; namdtools 0.1.14 documentation</title>
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.1.14 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.core.core</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for namdtools.core.core</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">core.py</span>
+<span class="sd">written in Python3</span>
+<span class="sd">author: C. Lockhart &lt;chris@lockhartlab.org&gt;</span>
+
+<span class="sd">&gt;&gt;&gt; from namdtools import run_namd</span>
+<span class="sd">&gt;&gt;&gt; result = run_namd(&#39;system.namd&#39;, &#39;system.log&#39;   , wait=True)</span>
+<span class="sd">&gt;&gt;&gt; print(result.log_)</span>
+
+
+<span class="sd">&gt;&gt;&gt; import namdtools</span>
+<span class="sd">&gt;&gt;&gt; config = namdtools.read_configuration(&#39;production.namd&#39;)</span>
+<span class="sd">&gt;&gt;&gt; config.run(10000)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">namdtools.exceptions</span> <span class="kn">import</span> <span class="n">NAMDError</span>
+<span class="kn">import</span> <span class="nn">namdtools.options</span> <span class="k">as</span> <span class="nn">options</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">Popen</span>
+
+
+<span class="c1"># NAMD configuration</span>
+<span class="k">class</span> <span class="nc">NAMDConfiguration</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    NAMD configuration file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize instance of NAMD configuration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            (Optional) Name of configuration file to read.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_read_configuration</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_read_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read configuration file.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO does the order in which arguments are read in matter?</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_steps : int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">pass</span>
+
+
+<span class="c1"># NAMD controller</span>
+<div class="viewcode-block" id="NAMD"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD">[docs]</a><span class="k">class</span> <span class="nc">NAMD</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Controls NAMD with Python.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initialize class instance</span>
+<div class="viewcode-block" id="NAMD.__init__"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">executable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the NAMD runner.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        configuration_path : str</span>
+<span class="sd">            (Optional) Path to NAMD configuration.</span>
+<span class="sd">        log_path : str</span>
+<span class="sd">            (Optional) Path to log file.</span>
+<span class="sd">        executable : str or list</span>
+<span class="sd">            (Optional) NAMD executable for command line. This will be built if not provided.</span>
+<span class="sd">        wait : bool</span>
+<span class="sd">            Should we wait for the NAMD job to finish? Or should it run in the background? (Default: True)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Set the NAMD configuration path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configuration_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">configuration_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">configuration_path</span> <span class="o">=</span> <span class="n">configuration_path</span>
+
+        <span class="c1"># Set the log path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">configuration_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">log_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">configuration_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.log&#39;</span>
+        <span class="k">if</span> <span class="n">log_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_path</span> <span class="o">=</span> <span class="n">log_path</span>
+
+        <span class="c1"># Set the NAMD executable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executable</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">executable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">executable</span> <span class="o">=</span> <span class="n">executable</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">executable</span> <span class="o">=</span> <span class="n">_compile_namd_executable</span><span class="p">()</span>
+
+        <span class="c1"># Job monitoring variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wait</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">wait</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="c1"># Get the configuration path</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">configuration_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the NAMD configuration path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            NAMD configuration path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configuration_path</span>
+
+    <span class="c1"># Set the configuration path</span>
+    <span class="nd">@configuration_path</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">configuration_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the NAMD configuration path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        configuration_path : str</span>
+<span class="sd">            NAMD configuration path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check that the configuration file exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">configuration_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> does not exist&#39;</span> <span class="o">%</span> <span class="n">configuration_path</span><span class="p">)</span>
+
+        <span class="c1"># Set the path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configuration_path</span> <span class="o">=</span> <span class="n">configuration_path</span>
+
+    <span class="c1"># Get the NAMD executable</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">executable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the NAMD executable with options.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str or list</span>
+<span class="sd">            NAMD executable with options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_executable</span>
+
+    <span class="c1"># Set the NAMD executable</span>
+    <span class="nd">@executable</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">executable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">executable</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the executable.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        executable : str or list</span>
+<span class="sd">            NAMD command to run through subprocess.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If executable is a string, crudely split it to list</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">executable</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">executable</span> <span class="o">=</span> <span class="n">executable</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+        <span class="c1"># Make sure we have a list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">executable</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;must be string or list&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Set the executable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_executable</span> <span class="o">=</span> <span class="n">executable</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Has the job started?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NAMDError</span><span class="p">(</span><span class="s1">&#39;job not found&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Return pid</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">pid</span>
+
+<div class="viewcode-block" id="NAMD.poll"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.poll">[docs]</a>    <span class="k">def</span> <span class="nf">poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if NAMD is still running.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None or intb</span>
+<span class="sd">            None if NAMD is running, return code if simulations are finished.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">log_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Logfile</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span>
+
+    <span class="nd">@log_path</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">log_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_path</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span> <span class="o">=</span> <span class="n">log_path</span>
+
+    <span class="c1"># Start simulations</span>
+<div class="viewcode-block" id="NAMD.start"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start NAMD simulation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check if NAMD is already running</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">poll</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">NAMDError</span><span class="p">(</span><span class="s1">&#39;NAMD already running&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Open output file and run</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_executable</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_configuration_path</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+
+        <span class="c1"># Should we wait?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wait</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NAMDError</span><span class="p">(</span><span class="s1">&#39;NAMD job did not finish successfully&#39;</span><span class="p">)</span></div>
+
+    <span class="c1"># Stop simulations</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Check if NAMD is already running</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">poll</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+
+        <span class="c1"># Otherwise, alert that NAMD is not running</span>
+        <span class="c1"># TODO should this be warning?</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="c1"># Is the NAMD job successful?</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Pull the status from the return code</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+
+        <span class="c1"># If status == 0, the job completed successfully</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Otherwise, we were not successful</span>
+        <span class="k">elif</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Return if successful</span>
+        <span class="k">return</span> <span class="n">status</span></div>
+
+
+<span class="c1"># Run namd on configuration file and write to log file</span>
+<div class="viewcode-block" id="run_namd"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.run_namd.html#namdtools.core.core.run_namd">[docs]</a><span class="k">def</span> <span class="nf">run_namd</span><span class="p">(</span><span class="n">configuration_file</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run NAMD on `configuration_file` and write to `log_file`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    configuration_file : str</span>
+<span class="sd">        Path to the NAMD configuration file.</span>
+<span class="sd">    log_file : str</span>
+<span class="sd">        Path to log file to write out.</span>
+<span class="sd">    wait : bool</span>
+<span class="sd">        Should we wait for the NAMD job to finish? Or should we launch in the background?</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    NAMD</span>
+<span class="sd">        Instance of NAMD controller.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create NAMD instance</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">NAMD</span><span class="p">(</span><span class="n">configuration_file</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="n">wait</span><span class="p">)</span>
+
+    <span class="c1"># Start NAMD</span>
+    <span class="n">job</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="c1"># Was run successful?</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NAMDError</span><span class="p">(</span><span class="s1">&#39;failed to successfully complete&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Return</span>
+    <span class="k">return</span> <span class="n">job</span></div>
+
+
+<span class="c1"># Extract energy from log file</span>
+<span class="k">def</span> <span class="nf">extract_energy</span><span class="p">(</span><span class="n">log_file</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+    <span class="c1"># Initialize DataFrame information</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Read through log file and extract energy records</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="c1"># Read first ETITLE</span>
+            <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ETITLE&#39;</span><span class="p">:</span>
+                <span class="n">columns</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="c1"># Save each energy record</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ENERGY&#39;</span><span class="p">:</span>
+                <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="c1"># Return DataFrame</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">read_configuration</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="c1"># Compile namd command</span>
+<span class="k">def</span> <span class="nf">_compile_namd_executable</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compile namd executable to run through subprocess.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of command-line arguments to send to subprocess.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Set up dummy list to store command</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Add charmrun to command</span>
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">use_charmrun</span><span class="p">:</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_first_available</span><span class="p">([</span>
+            <span class="n">options</span><span class="o">.</span><span class="n">charmrun_path</span><span class="p">,</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s1">&#39;charmrun&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;charmrun&#39;</span>
+        <span class="p">]))</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">charmrun_args</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+
+    <span class="c1"># Add namd to command</span>
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">namd_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NAMDError</span><span class="p">(</span><span class="s1">&#39;what kind of monster sets options.namd to None?&#39;</span><span class="p">)</span>
+    <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_first_available</span><span class="p">([</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">namd_path</span><span class="p">,</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s1">&#39;namd2&#39;</span><span class="p">),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s1">&#39;namd2.exe&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;namd2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;namd2.exe&#39;</span>
+    <span class="p">]))</span>
+    <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">namd_args</span><span class="p">:</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
+
+    <span class="c1"># Return</span>
+    <span class="k">return</span> <span class="n">cmd</span>
+
+
+<span class="c1"># Helper function to find first available existing path</span>
+<span class="k">def</span> <span class="nf">_first_available</span><span class="p">(</span><span class="n">paths</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loop through `paths` and find the first available.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    paths : list</span>
+<span class="sd">        List of paths.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        First path found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Loop over all paths and return first path that exists</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">path</span>
+
+    <span class="c1"># If we haven&#39;t found a path, throw an error</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> not found&#39;</span> <span class="o">%</span> <span class="n">paths</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.1.14 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.core.core</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Lockhart Lab.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>
