@@ -10,7 +10,7 @@ from .io import *
 # from namdtools.core import *
 
 __all__ = core.__all__
-__all__ += io.__all__
+__all__.extend(io.__all__)
 # __all__.extend(namd.__all__)
 
 
