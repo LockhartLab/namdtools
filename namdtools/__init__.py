@@ -2,15 +2,15 @@
 from . import core
 from .core import *
 
-from . import io
-from .io import *
+# from . import io
+# from .io import *
 
 
 # from .core import namd
 # from namdtools.core import *
 
 __all__ = core.__all__
-__all__.extend(io.__all__)
+# __all__.extend(io.__all__)
 # __all__.extend(namd.__all__)
 
 
