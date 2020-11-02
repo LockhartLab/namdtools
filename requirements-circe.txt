@@ -1,0 +1,17 @@
+codecov
+coverage
+gitpipe~=0.0.14
+glovebox~=0.0.5
+hypothesis
+izzy~=0.3.90
+numba
+numpy~=1.19.2
+pandas
+privatize
+pyyaml~=5.3.1
+scipy
+sphinx
+
+setuptools~=49.6.0
+flask~=1.1.2
+uplot~=0.1.56
