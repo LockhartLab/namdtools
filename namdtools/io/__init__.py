@@ -1,5 +1,4 @@
 
-from . import read
 from .read import *
 
 __all__ = [
