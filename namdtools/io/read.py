@@ -13,6 +13,7 @@ class Log:
 
 # Read output from NAMD run
 # Convert to object? Store raw output?
+# TODO allow glob read
 def read_log(fname):
     """
     Read output from NAMD.

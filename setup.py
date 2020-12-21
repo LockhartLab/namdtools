@@ -36,6 +36,7 @@ setup(
     packages=[
         'namdtools',
         'namdtools.core',
+        'namdtools.io'
     ],
     install_requires=[
         'glovebox',
