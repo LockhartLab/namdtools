@@ -84,6 +84,10 @@ def _read_log(fname):
             if line[:6] == 'ENERGY':
                 records.append(line.split()[1:])
 
+    # What if our file doesn't contain ETITLE? Should this return an error, or can we assume the columns?
+    columns = ['TS', 'BOND', 'ANGLE', 'DIHED', 'IMPRP', 'ELECT', 'VDW', 'BOUNDARY', 'MISC', 'KINETIC', 'TOTAL', 
+               'TEMP', 'POTENTIAL', 'TOTAL3', 'TEMPAVG', 'PRESSURE', 'GPRESSURE', 'VOLUME', 'PRESSAVG', 'GPRESSAVG']
+                
     # Return DataFrame
     return pd.DataFrame(records, columns=columns).set_index(columns[0])
 
