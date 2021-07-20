@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>namdtools.io.read &#8212; namdtools 0.1.dev21 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/nature.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.1.dev21 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for namdtools.io.read</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">read.py</span>
+
+<span class="sd">language: Python3</span>
+<span class="sd">author: C. Lockhart &lt;chris@lockhartlab.org&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">Log</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="c1"># Read output from NAMD run</span>
+<span class="c1"># Convert to object? Store raw output?</span>
+<div class="viewcode-block" id="read_log"><a class="viewcode-back" href="../../../api/generated/namdtools.io.read_log.html#namdtools.io.read_log">[docs]</a><span class="k">def</span> <span class="nf">read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read output from NAMD.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        Name of NAMD output file.</span>
+<span class="sd">    glob : bool</span>
+<span class="sd">        Allow for glob read.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        Data from NAMD output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Import to save time</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="k">if</span> <span class="n">glob</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span> <span class="k">as</span> <span class="n">glob_</span>
+        <span class="n">fnames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob_</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span><span class="p">]</span>
+
+    <span class="c1"># Read all files</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">data</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Return</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<span class="k">def</span> <span class="nf">_read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        Name of NAMD output file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Import pandas if not already loaded (to speed up namdtools in general)</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+    <span class="c1"># Initialize DataFrame information</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Read through log file and extract energy records</span>
+    <span class="c1"># TODO read in with regex</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stream</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="c1"># Read first ETITLE</span>
+            <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ETITLE&#39;</span><span class="p">:</span>
+                <span class="n">columns</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="c1"># Save each energy record</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ENERGY&#39;</span><span class="p">:</span>
+                <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="c1"># What if our file doesn&#39;t contain ETITLE? Should this return an error, or can we assume the columns?</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;TS&#39;</span><span class="p">,</span> <span class="s1">&#39;BOND&#39;</span><span class="p">,</span> <span class="s1">&#39;ANGLE&#39;</span><span class="p">,</span> <span class="s1">&#39;DIHED&#39;</span><span class="p">,</span> <span class="s1">&#39;IMPRP&#39;</span><span class="p">,</span> <span class="s1">&#39;ELECT&#39;</span><span class="p">,</span> <span class="s1">&#39;VDW&#39;</span><span class="p">,</span> <span class="s1">&#39;BOUNDARY&#39;</span><span class="p">,</span> <span class="s1">&#39;MISC&#39;</span><span class="p">,</span> <span class="s1">&#39;KINETIC&#39;</span><span class="p">,</span> <span class="s1">&#39;TOTAL&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;TEMP&#39;</span><span class="p">,</span> <span class="s1">&#39;POTENTIAL&#39;</span><span class="p">,</span> <span class="s1">&#39;TOTAL3&#39;</span><span class="p">,</span> <span class="s1">&#39;TEMPAVG&#39;</span><span class="p">,</span> <span class="s1">&#39;PRESSURE&#39;</span><span class="p">,</span> <span class="s1">&#39;GPRESSURE&#39;</span><span class="p">,</span> <span class="s1">&#39;VOLUME&#39;</span><span class="p">,</span> <span class="s1">&#39;PRESSAVG&#39;</span><span class="p">,</span> <span class="s1">&#39;GPRESSAVG&#39;</span><span class="p">]</span>
+                
+    <span class="c1"># Return DataFrame</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.1.dev21 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Lockhart Lab.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.1.
+    </div>
+  </body>
+</html>
