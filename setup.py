@@ -13,7 +13,7 @@ with open('version.yml', 'r') as f:
 version_dict = dict([element.split(': ') for element in data])
 
 # Convert the version_data to a string
-version = '.'.join([str(version_dict[key]) for key in ['major', 'minor', 'patch']])
+version = '.'.join([str(version_dict[key]) for key in ['major', 'minor', 'micro']])
 
 # Read in long description
 with open('README.md', 'r') as stream:
