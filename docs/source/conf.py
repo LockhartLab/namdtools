@@ -10,7 +10,7 @@ with open('../../version.yml', 'r') as f:
 version_dict = dict([element.split(': ') for element in data])
 
 # Convert the version_data to a string (add 1 for current build)
-version = '{0}.{1}.{2}'.format(version_dict['major'], version_dict['minor'], int(version_dict['patch']) + 1)
+version = '{0}.{1}.{2}'.format(version_dict['major'], version_dict['minor'], int(version_dict['micro']) + 1)
 print(version)
 
 # Project information
