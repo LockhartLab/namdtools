@@ -1,13 +1,6 @@
-codecov
-coverage
-gitpipe
-glovebox
-hypothesis
-izzy
 numba
 numpy
 pandas
-privatize
-pyyaml
+pyyaml>=5.3
 scipy
-sphinx
+sympy

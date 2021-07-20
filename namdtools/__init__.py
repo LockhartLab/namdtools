@@ -1,4 +1,7 @@
 
+from . import analysis
+from .analysis import *
+
 from . import core
 from .core import *
 
@@ -9,7 +12,8 @@ from .io import *
 # from .core import namd
 # from namdtools.core import *
 
-__all__ = core.__all__
+__all__ = analysis.__all__
+__all__.extend(core.__all__)
 __all__.extend(io.__all__)
 # __all__.extend(namd.__all__)
 

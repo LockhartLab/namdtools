@@ -35,14 +35,13 @@ setup(
     url="https://www.lockhartlab.org",
     packages=[
         'namdtools',
+        'namdtools.analysis',
         'namdtools.core',
         'namdtools.io'
     ],
     install_requires=[
-        'glovebox',
         'numpy',
         'pandas',
-        'typelike',
         'hypothesis',
         'numba'
     ],

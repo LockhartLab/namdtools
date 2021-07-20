@@ -1,7 +1,6 @@
 """
 increment_version.py
-
-author: Python3
+written in Python3
 author: C. Lockhart <chris@lockhartlab.org>
 """
 
@@ -12,17 +11,24 @@ import yaml
 with open('version.yml', 'r') as f:
     version = yaml.safe_load(f.read())
 
+# Strip "dev" out of micro
+version['micro'] = int(str(version['micro']).replace('dev', ''))
+
 # Update patch
-version['patch'] += 1
+version['micro'] += 1
+
+# Add "dev" back to patch
+if version['micro'] != 0:
+    version['micro'] = 'dev' + str(version['micro'])
 
 # Output version
 with open('version.yml', 'w') as f:
-    yaml.safe_dump(version, f)
+    yaml.safe_dump(version, f, sort_keys=False)
 
 # Transform version dict to string
-version = '.'.join([str(version[key]) for key in ['major', 'minor', 'patch']])
+version = '.'.join([str(version[key]) for key in ['major', 'minor', 'micro']])
 
-# Write version string to namdtools/_version.py
+# Write version string to molecular/_version.py
 with open('namdtools/version.py', 'w') as f:
     f.write("__version__ = '{}'\n".format(version))
 
