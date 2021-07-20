@@ -1,4 +1,4 @@
-namdtools.core.core.run\_namd
+﻿namdtools.core.core.run\_namd
 =============================
 
 .. currentmodule:: namdtools.core.core
