@@ -1,14 +1,56 @@
 """
 read.py
-
 language: Python3
-author: C. Lockhart <chris@lockhartlab.org>
+author: C. Lockhart <chrisblockhart@gmail.com>
 """
 
 
+# NAMD log
 class Log:
-    def __init__(self):
-        pass
+    """
+    NAMD log.
+    """
+
+    __slots__ = '_data'
+
+    # Initialize log
+    def __init__(self, data):
+        """
+        Initialize NAMD log
+
+        Parameters
+        ----------
+        data : pandas.DataFrame
+        """
+
+        self.data = data
+
+    # Create data property
+    @property
+    def data(self):
+        return self._data
+
+    # Set the data, must be pandas DataFrame
+    @data.setter
+    def data(self, data):
+        """
+        Set the data in the NAMD log.
+
+        Parameters
+        ----------
+        data : pandas.DataFrame
+        """
+
+        import pandas as pd
+
+        if not isinstance(data, pd.DataFrame):
+            raise AttributeError('must be pandas.DataFrame')
+
+        self._data = data
+
+    # Get unknown function calls and run them as pandas
+    def __getattr__(self, item):
+        return getattr(self._data, item)
 
 
 # Read output from NAMD run
@@ -48,7 +90,7 @@ def read_log(fname, glob=False):
             df = pd.concat([df, data], ignore_index=True)
 
     # Return
-    return df
+    return Log(df)
 
 
 def _read_log(fname):
@@ -85,10 +127,8 @@ def _read_log(fname):
                 records.append(line.split()[1:])
 
     # What if our file doesn't contain ETITLE? Should this return an error, or can we assume the columns?
-    columns = ['TS', 'BOND', 'ANGLE', 'DIHED', 'IMPRP', 'ELECT', 'VDW', 'BOUNDARY', 'MISC', 'KINETIC', 'TOTAL', 
-               'TEMP', 'POTENTIAL', 'TOTAL3', 'TEMPAVG', 'PRESSURE', 'GPRESSURE', 'VOLUME', 'PRESSAVG', 'GPRESSAVG']
-                
+    columns = ['ts', 'bond', 'angle', 'dihed', 'imprp', 'elect', 'vdw', 'boundary', 'misc', 'kinetic', 'total',
+               'temp', 'potential', 'total3', 'tempavg', 'pressure', 'gpressure', 'volume', 'pressavg', 'gpressavg']
+
     # Return DataFrame
     return pd.DataFrame(records, columns=columns).set_index(columns[0])
-
-
