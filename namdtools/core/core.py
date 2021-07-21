@@ -1,7 +1,7 @@
 """
 core.py
 written in Python3
-author: C. Lockhart <chris@lockhartlab.org>
+author: C. Lockhart <chrisblockhart@gmail.com>
 
 >>> from namdtools import run_namd
 >>> result = run_namd('system.namd', 'system.log'   , wait=True)
