@@ -85,4 +85,4 @@ def _read_log(fname):
                'temp', 'potential', 'total3', 'tempavg', 'pressure', 'gpressure', 'volume', 'pressavg', 'gpressavg']
 
     # Return DataFrame
-    return pd.DataFrame(records, columns=columns).set_index(columns[0])
+    return pd.DataFrame(records, columns=columns).set_index(columns[0]).astype(float)
