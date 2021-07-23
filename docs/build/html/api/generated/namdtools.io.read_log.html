@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>namdtools.io.read_log &#8212; namdtools 0.2.dev29 documentation</title>
+    <title>namdtools.io.read_log &#8212; namdtools 0.2.dev30 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/nature.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../io.html" title="namdtools.io"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.2.dev29 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.2.dev30 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../api.html" >API Reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../io.html" accesskey="U">namdtools.io</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read_log</a></li> 
@@ -42,20 +42,21 @@
 <h1>namdtools.io.read_log<a class="headerlink" href="#namdtools-io-read-log" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="namdtools.io.read_log">
-<span class="sig-prename descclassname"><span class="pre">namdtools.io.</span></span><span class="sig-name descname"><span class="pre">read_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/namdtools/io/read.html#read_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#namdtools.io.read_log" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">namdtools.io.</span></span><span class="sig-name descname"><span class="pre">read_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/namdtools/io/read.html#read_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#namdtools.io.read_log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read output from NAMD.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of NAMD output file.</p></li>
-<li><p><strong>glob</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Allow for glob read.</p></li>
+<li><p><strong>glob</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – Does <cite>fname</cite> need to be globbed? If a boolean, uses <span class="xref std std-ref">glob</span>. If dictionary, uses <span class="xref std std-ref">vglob</span>.
+(Default: None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Data from NAMD output.</p>
+<dd class="field-even"><p></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.3.0)">pandas.DataFrame</a></p>
+<dd class="field-odd"><p>Log</p>
 </dd>
 </dl>
 </dd></dl>
@@ -102,7 +103,7 @@
         <li class="right" >
           <a href="../io.html" title="namdtools.io"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.2.dev29 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.2.dev30 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../api.html" >API Reference</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../io.html" >namdtools.io</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read_log</a></li> 
