@@ -9,7 +9,7 @@ from namdtools.core import Log
 
 # Read output from NAMD run
 # Convert to object? Store raw output?
-def read_log(fname, glob=False):
+def read_log(fname, glob=None):
     """
     Read output from NAMD.
 
@@ -17,34 +17,54 @@ def read_log(fname, glob=False):
     ----------
     fname : str
         Name of NAMD output file.
-    glob : bool
-        Allow for glob read.
+    glob : bool or dict
+        Does `fname` need to be globbed? If a boolean, uses :ref:`glob`. If dictionary, uses :ref:`vglob`.
+        (Default: None)
 
     Returns
     -------
-    pandas.DataFrame
-        Data from NAMD output.
+    Log
     """
 
     # Import to save time
     import pandas as pd
+
+    # If glob, change fname to include all globbed files
     if glob:
-        from glob import glob as glob_
-        fnames = sorted(glob_(fname))
+        from molecular.io.utilities import Path, vglob  #
+
+        # Convert glob to a empty dictionary if necessary
+        if not isinstance(glob, dict):
+            glob = {}
+
+        # Glob first; if glob is empty, throw an error
+        fname_glob = vglob(fname, errors='raise', **glob)
+        if not fname_glob:
+            raise FileNotFoundError(fname)
+
+        # Sort glob
+        # fnames = sorted(fname_glob)
+        fnames = fname_glob
     else:
         fnames = [fname]
 
-    # Read all files
-    df = None
-    for fname in fnames:
-        data = _read_log(fname)
-        if df is None:
-            df = data
-        else:
-            df = pd.concat([df, data], ignore_index=True)
+    # Cycle over fnames and read in
+    # df = None
+    # for fname in fnames:
+    #     data = _read_log(fname)
+    #     if df is None:
+    #         df = data
+    #     else:
+    #         df = pd.concat([df, data], ignore_index=True)
+    data = list(map(_read_log, fnames))
+    if glob:
+        data = [table.assign(**Path(fname).metadata) for fname, table in zip(fnames, data)]
+
+    # Concatenate
+    data = data[0] if len(data) == 1 else pd.concat(data, ignore_index=ignore_index)
 
     # Return
-    return Log(df)
+    return Log(data)
 
 
 def _read_log(fname):
