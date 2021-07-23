@@ -4,53 +4,7 @@ language: Python3
 author: C. Lockhart <chrisblockhart@gmail.com>
 """
 
-
-# NAMD log
-class Log:
-    """
-    NAMD log.
-    """
-
-    __slots__ = '_data'
-
-    # Initialize log
-    def __init__(self, data):
-        """
-        Initialize NAMD log
-
-        Parameters
-        ----------
-        data : pandas.DataFrame
-        """
-
-        self.data = data
-
-    # Create data property
-    @property
-    def data(self):
-        return self._data
-
-    # Set the data, must be pandas DataFrame
-    @data.setter
-    def data(self, data):
-        """
-        Set the data in the NAMD log.
-
-        Parameters
-        ----------
-        data : pandas.DataFrame
-        """
-
-        import pandas as pd
-
-        if not isinstance(data, pd.DataFrame):
-            raise AttributeError('must be pandas.DataFrame')
-
-        self._data = data
-
-    # Get unknown function calls and run them as pandas
-    def __getattr__(self, item):
-        return getattr(self._data, item)
+from namdtools.core import Log
 
 
 # Read output from NAMD run
