@@ -2,7 +2,8 @@
 from .core import *
 
 __all__ = [
-    'NAMDConfiguration',
+    'Configuration',
+    'Log',
     'NAMD',
     'run_namd'
 ]
