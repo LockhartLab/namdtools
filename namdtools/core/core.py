@@ -113,6 +113,9 @@ class Log:
     def __getitem__(self, item):
         return self._data[item]
 
+    def __len__(self):
+        return len(self._data)
+
 
 # NAMD controller
 class NAMD:
