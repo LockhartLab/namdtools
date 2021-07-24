@@ -58,10 +58,10 @@ def read_log(fname, glob=None):
     #         df = pd.concat([df, data], ignore_index=True)
     data = list(map(_read_log, fnames))
     if glob:
-        data = [table.assign(**Path(fname).metadata) for fname, table in zip(fnames, data)]
+        data = [table.assign(**Path(fname).metadata) for fname, table in zip(fnames, data)]  # noqa
 
     # Concatenate
-    data = data[0] if len(data) == 1 else pd.concat(data, ignore_index=ignore_index)
+    data = data[0] if len(data) == 1 else pd.concat(data, ignore_index=True)
 
     # Return
     return Log(data)
