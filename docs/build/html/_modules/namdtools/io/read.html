@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>namdtools.io.read &#8212; namdtools 0.2.dev29 documentation</title>
+    <title>namdtools.io.read &#8212; namdtools 0.2.dev30 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/nature.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev29 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev30 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
       </ul>
@@ -44,7 +44,7 @@
 
 <span class="c1"># Read output from NAMD run</span>
 <span class="c1"># Convert to object? Store raw output?</span>
-<div class="viewcode-block" id="read_log"><a class="viewcode-back" href="../../../api/generated/namdtools.io.read_log.html#namdtools.io.read_log">[docs]</a><span class="k">def</span> <span class="nf">read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="read_log"><a class="viewcode-back" href="../../../api/generated/namdtools.io.read_log.html#namdtools.io.read_log">[docs]</a><span class="k">def</span> <span class="nf">read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read output from NAMD.</span>
 
@@ -52,34 +52,54 @@
 <span class="sd">    ----------</span>
 <span class="sd">    fname : str</span>
 <span class="sd">        Name of NAMD output file.</span>
-<span class="sd">    glob : bool</span>
-<span class="sd">        Allow for glob read.</span>
+<span class="sd">    glob : bool or dict</span>
+<span class="sd">        Does `fname` need to be globbed? If a boolean, uses :ref:`glob`. If dictionary, uses :ref:`vglob`.</span>
+<span class="sd">        (Default: None)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    pandas.DataFrame</span>
-<span class="sd">        Data from NAMD output.</span>
+<span class="sd">    Log</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Import to save time</span>
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+    <span class="c1"># If glob, change fname to include all globbed files</span>
     <span class="k">if</span> <span class="n">glob</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span> <span class="k">as</span> <span class="n">glob_</span>
-        <span class="n">fnames</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob_</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+        <span class="kn">from</span> <span class="nn">molecular.io.utilities</span> <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">vglob</span>  <span class="c1">#</span>
+
+        <span class="c1"># Convert glob to a empty dictionary if necessary</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">glob</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">glob</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Glob first; if glob is empty, throw an error</span>
+        <span class="n">fname_glob</span> <span class="o">=</span> <span class="n">vglob</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">glob</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fname_glob</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
+        <span class="c1"># Sort glob</span>
+        <span class="c1"># fnames = sorted(fname_glob)</span>
+        <span class="n">fnames</span> <span class="o">=</span> <span class="n">fname_glob</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fnames</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span><span class="p">]</span>
 
-    <span class="c1"># Read all files</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">data</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">data</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Cycle over fnames and read in</span>
+    <span class="c1"># df = None</span>
+    <span class="c1"># for fname in fnames:</span>
+    <span class="c1">#     data = _read_log(fname)</span>
+    <span class="c1">#     if df is None:</span>
+    <span class="c1">#         df = data</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         df = pd.concat([df, data], ignore_index=True)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_read_log</span><span class="p">,</span> <span class="n">fnames</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">glob</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">table</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="n">Path</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span> <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">table</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fnames</span><span class="p">,</span> <span class="n">data</span><span class="p">)]</span>
+
+    <span class="c1"># Concatenate</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="n">ignore_index</span><span class="p">)</span>
 
     <span class="c1"># Return</span>
-    <span class="k">return</span> <span class="n">Log</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Log</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
@@ -149,7 +169,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev29 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev30 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
       </ul>
