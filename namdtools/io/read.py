@@ -62,6 +62,7 @@ def read_log(fname, glob=None):
 
     # Concatenate
     data = data[0] if len(data) == 1 else pd.concat(data, ignore_index=True)
+    data.index.name = 'ts'  # make sure that ts is still the index name
 
     # Return
     return Log(data)
