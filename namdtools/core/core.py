@@ -116,6 +116,9 @@ class Log:
     def __len__(self):
         return len(self._data)
 
+    def __setitem__(self, key, value):
+        self._data[key] = value
+
 
 # NAMD controller
 class NAMD:
