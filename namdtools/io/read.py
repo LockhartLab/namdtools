@@ -62,12 +62,12 @@ def read_log(fname, glob=None):
 
     # Concatenate
     data = data[0] if len(data) == 1 else pd.concat(data, ignore_index=True)
-    data.index.name = 'ts'  # make sure that ts is still the index name
 
     # Return
     return Log(data)
 
 
+# TODO make a Cython backend? Or a C backend? This is still slow.
 def _read_log(fname):
     """
     Read NAMD output file.
@@ -105,7 +105,7 @@ def _read_log(fname):
     energy = np.genfromtxt(energy_records, autostrip=True, usecols=range(1, len(etitle) + 1))
 
     # Return as DataFrame
-    return pd.DataFrame(energy, columns=etitle).set_index(etitle[0])
+    return pd.DataFrame(energy, columns=etitle)  # .set_index(etitle[0])
 
 
 def _read_log_old(fname):
