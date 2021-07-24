@@ -69,6 +69,46 @@ def read_log(fname, glob=None):
 
 def _read_log(fname):
     """
+    Read NAMD output file.
+
+    Parameters
+    ----------
+    fname : str
+        Name of NAMD output file.
+
+    Returns
+    -------
+    pandas.DataFrame
+    """
+
+    # Import relevant packages
+    import numpy as np
+    import pandas as pd
+    import re
+
+    # Read in entire log file
+    with open(fname) as stream:
+        records = stream.read()
+
+    # Find ETITLE, we only need the first record. Otherwise, guess that ETITLE follows standard format
+    etitle_start = records.find('ETITLE')
+    if etitle_start >= 0:
+        etitle_end = records.find('ENERGY', etitle_start)
+        etitle = records[etitle_start:etitle_end].lower().split()[1:]  # first column is ETITLE
+    else:
+        etitle = ['ts', 'bond', 'angle', 'dihed', 'imprp', 'elect', 'vdw', 'boundary', 'misc', 'kinetic', 'total',
+                  'temp', 'potential', 'total3', 'tempavg', 'pressure', 'gpressure', 'volume', 'pressavg', 'gpressavg']
+
+    # Extract only ENERGY records, then generate numpy array. We skip the first column which is ENERGY
+    energy_records = re.sub(r'^(?!ENERGY).*$', '', records, flags=re.MULTILINE).split('\n')
+    energy = np.genfromtxt(energy_records, autostrip=True, usecols=range(1, len(etitle) + 1))
+
+    # Return as DataFrame
+    return pd.DataFrame(energy, columns=etitle).set_index(etitle[0])
+
+
+def _read_log_old(fname):
+    """
 
 
     Parameters
