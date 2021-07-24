@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>namdtools.io.read &#8212; namdtools 0.2.dev31 documentation</title>
+    <title>namdtools.io.read &#8212; namdtools 0.2.dev32 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/nature.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev31 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev32 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
       </ul>
@@ -104,6 +104,46 @@
 
 <span class="k">def</span> <span class="nf">_read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read NAMD output file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        Name of NAMD output file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Import relevant packages</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="kn">import</span> <span class="nn">re</span>
+
+    <span class="c1"># Read in entire log file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># Find ETITLE, we only need the first record. Otherwise, guess that ETITLE follows standard format</span>
+    <span class="n">etitle_start</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;ETITLE&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">etitle_start</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">etitle_end</span> <span class="o">=</span> <span class="n">records</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;ENERGY&#39;</span><span class="p">,</span> <span class="n">etitle_start</span><span class="p">)</span>
+        <span class="n">etitle</span> <span class="o">=</span> <span class="n">records</span><span class="p">[</span><span class="n">etitle_start</span><span class="p">:</span><span class="n">etitle_end</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># first column is ETITLE</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">etitle</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="s1">&#39;bond&#39;</span><span class="p">,</span> <span class="s1">&#39;angle&#39;</span><span class="p">,</span> <span class="s1">&#39;dihed&#39;</span><span class="p">,</span> <span class="s1">&#39;imprp&#39;</span><span class="p">,</span> <span class="s1">&#39;elect&#39;</span><span class="p">,</span> <span class="s1">&#39;vdw&#39;</span><span class="p">,</span> <span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;misc&#39;</span><span class="p">,</span> <span class="s1">&#39;kinetic&#39;</span><span class="p">,</span> <span class="s1">&#39;total&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;potential&#39;</span><span class="p">,</span> <span class="s1">&#39;total3&#39;</span><span class="p">,</span> <span class="s1">&#39;tempavg&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">,</span> <span class="s1">&#39;gpressure&#39;</span><span class="p">,</span> <span class="s1">&#39;volume&#39;</span><span class="p">,</span> <span class="s1">&#39;pressavg&#39;</span><span class="p">,</span> <span class="s1">&#39;gpressavg&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Extract only ENERGY records, then generate numpy array. We skip the first column which is ENERGY</span>
+    <span class="n">energy_records</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(?!ENERGY).*$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">records</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">energy_records</span><span class="p">,</span> <span class="n">autostrip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">etitle</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Return as DataFrame</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">etitle</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">etitle</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">_read_log_old</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 
 
 <span class="sd">    Parameters</span>
@@ -169,7 +209,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev31 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev32 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
       </ul>
