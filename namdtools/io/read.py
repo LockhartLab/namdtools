@@ -1,7 +1,7 @@
 """
 read.py
 language: Python3
-author: C. Lockhart <chrisblockhart@gmail.com>
+author: C. Lockhart <clockha2@gmu.edu>
 """
 
 from namdtools.core import Log
@@ -9,7 +9,7 @@ from namdtools.core import Log
 
 # Read output from NAMD run
 # Convert to object? Store raw output?
-def read_log(fname, glob=None):
+def read_log(fname, glob=None, usecols=None):
     """
     Read output from NAMD.
 
@@ -20,6 +20,8 @@ def read_log(fname, glob=None):
     glob : bool or dict
         Does `fname` need to be globbed? If a boolean, uses :ref:`glob`. If dictionary, uses :ref:`vglob`.
         (Default: None)
+    usecols : list-like or callable
+        (Optional) Specify columns to return.
 
     Returns
     -------
@@ -27,6 +29,7 @@ def read_log(fname, glob=None):
     """
 
     # Import to save time
+    from functools import partial
     import pandas as pd
 
     # If glob, change fname to include all globbed files
@@ -56,7 +59,7 @@ def read_log(fname, glob=None):
     #         df = data
     #     else:
     #         df = pd.concat([df, data], ignore_index=True)
-    data = list(map(_read_log, fnames))
+    data = list(map(partial(_read_log, usecols=usecols), fnames))
     if glob:
         data = [table.assign(**Path(fname).metadata) for fname, table in zip(fnames, data)]  # noqa
 
@@ -68,7 +71,7 @@ def read_log(fname, glob=None):
 
 
 # TODO make a Cython backend? Or a C backend? This is still slow.
-def _read_log(fname):
+def _read_log(fname, usecols=None):
     """
     Read NAMD output file.
 
@@ -76,6 +79,8 @@ def _read_log(fname):
     ----------
     fname : str
         Name of NAMD output file.
+    usecols : list-like or callable
+        (Optional) Specific columns to read in.
 
     Returns
     -------
@@ -100,12 +105,20 @@ def _read_log(fname):
         etitle = ['ts', 'bond', 'angle', 'dihed', 'imprp', 'elect', 'vdw', 'boundary', 'misc', 'kinetic', 'total',
                   'temp', 'potential', 'total3', 'tempavg', 'pressure', 'gpressure', 'volume', 'pressavg', 'gpressavg']
 
+    # Convert usecols to integer if collection of strings
+    if usecols is not None:
+        usecols = np.array(usecols)
+        if issubclass(usecols.dtype.type, str):
+            usecols = np.flatnonzero(np.in1d(etitle, usecols))
+    else:
+        usecols = np.arange(len(etitle))
+
     # Extract only ENERGY records, then generate numpy array. We skip the first column which is ENERGY
     energy_records = re.sub(r'^(?!ENERGY).*$', '', records, flags=re.MULTILINE).split('\n')
-    energy = np.genfromtxt(energy_records, autostrip=True, usecols=range(1, len(etitle) + 1))
+    energy = np.genfromtxt(energy_records, autostrip=True, usecols=usecols+1)
 
     # Return as DataFrame
-    return pd.DataFrame(energy, columns=etitle)  # .set_index(etitle[0])
+    return pd.DataFrame(energy, columns=np.array(etitle)[usecols])  # .set_index(etitle[0])
 
 
 def _read_log_old(fname):
