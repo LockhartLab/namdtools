@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>namdtools.io.read &#8212; namdtools 0.2.dev36 documentation</title>
+    <title>namdtools.io.read &#8212; namdtools 0.2.dev37 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/nature.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -21,7 +21,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev36 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev37 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
       </ul>
@@ -36,7 +36,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">read.py</span>
 <span class="sd">language: Python3</span>
-<span class="sd">author: C. Lockhart &lt;chrisblockhart@gmail.com&gt;</span>
+<span class="sd">author: C. Lockhart &lt;clockha2@gmu.edu&gt;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">namdtools.core</span> <span class="kn">import</span> <span class="n">Log</span>
@@ -44,7 +44,7 @@
 
 <span class="c1"># Read output from NAMD run</span>
 <span class="c1"># Convert to object? Store raw output?</span>
-<div class="viewcode-block" id="read_log"><a class="viewcode-back" href="../../../api/generated/namdtools.io.read_log.html#namdtools.io.read_log">[docs]</a><span class="k">def</span> <span class="nf">read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="read_log"><a class="viewcode-back" href="../../../api/generated/namdtools.io.read_log.html#namdtools.io.read_log">[docs]</a><span class="k">def</span> <span class="nf">read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read output from NAMD.</span>
 
@@ -55,6 +55,8 @@
 <span class="sd">    glob : bool or dict</span>
 <span class="sd">        Does `fname` need to be globbed? If a boolean, uses :ref:`glob`. If dictionary, uses :ref:`vglob`.</span>
 <span class="sd">        (Default: None)</span>
+<span class="sd">    usecols : list-like or callable</span>
+<span class="sd">        (Optional) Specify columns to return.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -62,6 +64,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Import to save time</span>
+    <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
     <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
     <span class="c1"># If glob, change fname to include all globbed files</span>
@@ -91,7 +94,7 @@
     <span class="c1">#         df = data</span>
     <span class="c1">#     else:</span>
     <span class="c1">#         df = pd.concat([df, data], ignore_index=True)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_read_log</span><span class="p">,</span> <span class="n">fnames</span><span class="p">))</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">_read_log</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">usecols</span><span class="p">),</span> <span class="n">fnames</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">glob</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">table</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="o">**</span><span class="n">Path</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span> <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">table</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fnames</span><span class="p">,</span> <span class="n">data</span><span class="p">)]</span>  <span class="c1"># noqa</span>
 
@@ -103,7 +106,7 @@
 
 
 <span class="c1"># TODO make a Cython backend? Or a C backend? This is still slow.</span>
-<span class="k">def</span> <span class="nf">_read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_read_log</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read NAMD output file.</span>
 
@@ -111,6 +114,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    fname : str</span>
 <span class="sd">        Name of NAMD output file.</span>
+<span class="sd">    usecols : list-like or callable</span>
+<span class="sd">        (Optional) Specific columns to read in.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -135,12 +140,20 @@
         <span class="n">etitle</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ts&#39;</span><span class="p">,</span> <span class="s1">&#39;bond&#39;</span><span class="p">,</span> <span class="s1">&#39;angle&#39;</span><span class="p">,</span> <span class="s1">&#39;dihed&#39;</span><span class="p">,</span> <span class="s1">&#39;imprp&#39;</span><span class="p">,</span> <span class="s1">&#39;elect&#39;</span><span class="p">,</span> <span class="s1">&#39;vdw&#39;</span><span class="p">,</span> <span class="s1">&#39;boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;misc&#39;</span><span class="p">,</span> <span class="s1">&#39;kinetic&#39;</span><span class="p">,</span> <span class="s1">&#39;total&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;temp&#39;</span><span class="p">,</span> <span class="s1">&#39;potential&#39;</span><span class="p">,</span> <span class="s1">&#39;total3&#39;</span><span class="p">,</span> <span class="s1">&#39;tempavg&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">,</span> <span class="s1">&#39;gpressure&#39;</span><span class="p">,</span> <span class="s1">&#39;volume&#39;</span><span class="p">,</span> <span class="s1">&#39;pressavg&#39;</span><span class="p">,</span> <span class="s1">&#39;gpressavg&#39;</span><span class="p">]</span>
 
+    <span class="c1"># Convert usecols to integer if collection of strings</span>
+    <span class="k">if</span> <span class="n">usecols</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">usecols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">usecols</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">usecols</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">usecols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">etitle</span><span class="p">,</span> <span class="n">usecols</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">usecols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">etitle</span><span class="p">))</span>
+
     <span class="c1"># Extract only ENERGY records, then generate numpy array. We skip the first column which is ENERGY</span>
     <span class="n">energy_records</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(?!ENERGY).*$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">records</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">energy_records</span><span class="p">,</span> <span class="n">autostrip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">etitle</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">energy_records</span><span class="p">,</span> <span class="n">autostrip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">usecols</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Return as DataFrame</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">etitle</span><span class="p">)</span>  <span class="c1"># .set_index(etitle[0])</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">etitle</span><span class="p">)[</span><span class="n">usecols</span><span class="p">])</span>  <span class="c1"># .set_index(etitle[0])</span>
 
 
 <span class="k">def</span> <span class="nf">_read_log_old</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
@@ -210,14 +223,14 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev36 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.dev37 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.io.read</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Lockhart Lab.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.1.2.
     </div>
   </body>
 </html>
