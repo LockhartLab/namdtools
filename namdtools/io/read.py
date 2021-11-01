@@ -34,7 +34,7 @@ def read_log(fname, glob=None, usecols=None):
 
     # If glob, change fname to include all globbed files
     if glob:
-        from molecular.io.utilities import Path, vglob  #
+        from pathogen import Path, vglob  #
 
         # Convert glob to a empty dictionary if necessary
         if not isinstance(glob, dict):
