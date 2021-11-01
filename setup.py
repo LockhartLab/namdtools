@@ -42,8 +42,6 @@ setup(
     install_requires=[
         'numpy',
         'pandas',
-        'hypothesis',
-        'numba'
     ],
     include_package_data=True,
     zip_safe=True
