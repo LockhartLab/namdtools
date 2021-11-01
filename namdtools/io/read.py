@@ -114,7 +114,8 @@ def _read_log(fname, usecols=None):
         usecols = np.arange(len(etitle))
 
     # Extract only ENERGY records, then generate numpy array. We skip the first column which is ENERGY
-    energy_records = re.sub(r'^(?!ENERGY).*$', '', records, flags=re.MULTILINE).split('\n')
+    energy_records = re.sub(r'^(?!ENERGY).*$', '', records, flags=re.MULTILINE)  #.split('\n')
+    energy_records = re.split('\n+', energy_records.strip())  # might be unnecessary
     energy = np.genfromtxt(energy_records, autostrip=True, usecols=usecols+1)
 
     # Return as DataFrame
