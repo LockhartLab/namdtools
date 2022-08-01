@@ -38,7 +38,7 @@ def configuration(parent_package='', top_path=None):
 
 # Setup
 setup(
-    name='namdtools',
+    # name='namdtools',
     version=version,
     author='C. Lockhart',
     author_email='clockha2@gmu.edu',
