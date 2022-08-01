@@ -4,7 +4,11 @@ written in Python3
 author: C. Lockhart <chris@lockhartlab.org>
 """
 
-from setuptools import setup
+# from setuptools import setup
+from Cython.Build import cythonize
+import numpy as np
+from numpy.distutils.core import Extension, setup
+import os.path
 
 
 # Read version
@@ -28,7 +32,7 @@ setup(
     name='namdtools',
     version=version,
     author='C. Lockhart',
-    author_email='chris@lockhartlab.org',
+    author_email='clockha2@gmu.edu',
     description='A Python interface to NAMD',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -43,6 +47,13 @@ setup(
         'numpy',
         'pandas',
     ],
-    include_package_data=True,
-    zip_safe=True
+    # include_package_data=True,
+    zip_safe=True,
+    ext_modules=cythonize([
+        Extension(
+            'namdtools.io._read_utils',
+            sources=[os.path.join('namdtools', 'io', '_read_utils.pyx')],
+            include_dirs=[np.get_include()]
+        )
+    ])
 )

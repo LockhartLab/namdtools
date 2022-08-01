@@ -87,23 +87,47 @@ def _read_log(fname, usecols=None):
     pandas.DataFrame
     """
 
+    # # Import relevant packages
+    # import numpy as np
+    # import pandas as pd
+    # import re
+    #
+    # # Read in entire log file
+    # with open(fname) as stream:
+    #     records = stream.read()
+    #
+    # # Find ETITLE, we only need the first record. Otherwise, guess that ETITLE follows standard format
+    # etitle_start = records.find('ETITLE')
+    # if etitle_start >= 0:
+    #     etitle_end = records.find('ENERGY', etitle_start)
+    #     etitle = records[etitle_start:etitle_end].lower().split()[1:]  # first column is ETITLE
+    # else:
+    #     etitle = ['ts', 'bond', 'angle', 'dihed', 'imprp', 'elect', 'vdw', 'boundary', 'misc', 'kinetic', 'total',
+    #               'temp', 'potential', 'total3', 'tempavg', 'pressure', 'gpressure', 'volume', 'pressavg', 'gpressavg']
+    #
+    # # Convert usecols to integer if collection of strings
+    # if usecols is not None:
+    #     usecols = np.array(usecols)
+    #     if issubclass(usecols.dtype.type, str):
+    #         usecols = np.flatnonzero(np.in1d(etitle, usecols))
+    # else:
+    #     usecols = np.arange(len(etitle))
+    #
+    # # Extract only ENERGY records, then generate numpy array. We skip the first column which is ENERGY
+    # energy_records = re.sub(r'^(?!ENERGY).*$', '', records, flags=re.MULTILINE)  #.split('\n')
+    # energy_records = re.split('\n+', energy_records.strip())  # might be unnecessary
+    # energy = np.genfromtxt(energy_records, autostrip=True, usecols=usecols+1)
+    #
+    # # Return as DataFrame
+    # return pd.DataFrame(energy, columns=np.array(etitle)[usecols])  # .set_index(etitle[0])
+
     # Import relevant packages
+    from namdtools.io._read_utils import _parse_energy, _parse_etitle
     import numpy as np
     import pandas as pd
-    import re
 
-    # Read in entire log file
-    with open(fname) as stream:
-        records = stream.read()
-
-    # Find ETITLE, we only need the first record. Otherwise, guess that ETITLE follows standard format
-    etitle_start = records.find('ETITLE')
-    if etitle_start >= 0:
-        etitle_end = records.find('ENERGY', etitle_start)
-        etitle = records[etitle_start:etitle_end].lower().split()[1:]  # first column is ETITLE
-    else:
-        etitle = ['ts', 'bond', 'angle', 'dihed', 'imprp', 'elect', 'vdw', 'boundary', 'misc', 'kinetic', 'total',
-                  'temp', 'potential', 'total3', 'tempavg', 'pressure', 'gpressure', 'volume', 'pressavg', 'gpressavg']
+    # Parse etitle
+    etitle = _parse_etitle(fname)
 
     # Convert usecols to integer if collection of strings
     if usecols is not None:
@@ -113,13 +137,11 @@ def _read_log(fname, usecols=None):
     else:
         usecols = np.arange(len(etitle))
 
-    # Extract only ENERGY records, then generate numpy array. We skip the first column which is ENERGY
-    energy_records = re.sub(r'^(?!ENERGY).*$', '', records, flags=re.MULTILINE)  #.split('\n')
-    energy_records = re.split('\n+', energy_records.strip())  # might be unnecessary
-    energy = np.genfromtxt(energy_records, autostrip=True, usecols=usecols+1)
+    # Parse energy
+    energy = _parse_energy(fname, usecols)
 
     # Return as DataFrame
-    return pd.DataFrame(energy, columns=np.array(etitle)[usecols])  # .set_index(etitle[0])
+    return pd.DataFrame(energy, columns=etitle[usecols])
 
 
 def _read_log_old(fname):
