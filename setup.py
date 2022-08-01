@@ -58,12 +58,7 @@ setup(
     zip_safe=True,
     ext_modules=cythonize([
         Extension(
-            'namdtools.io._parse_energy',
-            sources=[os.path.join('namdtools', 'io', '_read_utils.pyx')],
-            include_dirs=[np.get_include()]
-        ),
-        Extension(
-            'namdtools.io._parse_etitle',
+            'namdtools.io._read_utils',
             sources=[os.path.join('namdtools', 'io', '_read_utils.pyx')],
             include_dirs=[np.get_include()]
         ),
