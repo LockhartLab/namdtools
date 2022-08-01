@@ -8,6 +8,7 @@ author: C. Lockhart <chris@lockhartlab.org>
 from Cython.Build import cythonize
 import numpy as np
 from numpy.distutils.core import Extension, setup
+from numpy.distutils.misc_util import Configuration
 import os.path
 
 
@@ -27,6 +28,14 @@ with open('README.rst', 'r') as stream:
 with open('requirements.txt', 'r') as stream:
     requirements = stream.read().splitlines()
 
+
+# Create configuration
+def configuration(parent_package='', top_path=None):
+    config = Configuration('namdtools', parent_package, top_path)
+    # config.add_data_dir(('_include', 'molecular/_include'))  # not sure why this wasn't working with manifest.in
+    return config
+
+
 # Setup
 setup(
     name='namdtools',
@@ -43,11 +52,13 @@ setup(
         'namdtools.core',
         'namdtools.io'
     ],
-    install_requires=[
-        'numpy',
-        'pandas',
-    ],
+    install_requires=requirements,
+    # install_requires=[
+    #     'numpy',
+    #     'pandas',
+    # ],
     # include_package_data=True,
+    configuration=configuration,
     zip_safe=True,
     ext_modules=cythonize([
         Extension(
@@ -55,5 +66,5 @@ setup(
             sources=[os.path.join('namdtools', 'io', '_read_utils.pyx')],
             include_dirs=[np.get_include()]
         )
-    ])
+    ]),
 )
