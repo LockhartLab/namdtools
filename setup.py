@@ -20,7 +20,7 @@ version_dict = dict([element.split(': ') for element in data])
 version = '.'.join([str(version_dict[key]) for key in ['major', 'minor', 'micro']])
 
 # Read in long description
-with open('README.md', 'r') as stream:
+with open('README.rst', 'r') as stream:
     long_description = stream.read()
 
 # Read in requirements.txt
@@ -35,7 +35,7 @@ setup(
     author_email='clockha2@gmu.edu',
     description='A Python interface to NAMD',
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    # long_description_content_type='text/markdown',
     url="https://www.lockhartlab.org",
     packages=[
         'namdtools',
