@@ -4,11 +4,11 @@ written in Python3
 author: C. Lockhart <chris@lockhartlab.org>
 """
 
-from Cython.Build import cythonize
 import numpy as np
 import os.path
 from setuptools import Extension, setup
 
+from Cython.Build import cythonize
 
 # Read version
 with open('version.yml', 'r') as f:
