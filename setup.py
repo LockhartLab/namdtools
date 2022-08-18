@@ -4,12 +4,10 @@ written in Python3
 author: C. Lockhart <chris@lockhartlab.org>
 """
 
-# from setuptools import setup
 from Cython.Build import cythonize
 import numpy as np
-from numpy.distutils.core import Extension, setup
-from numpy.distutils.misc_util import Configuration
 import os.path
+from setuptools import Extension, setup
 
 
 # Read version
@@ -29,16 +27,16 @@ with open('requirements.txt', 'r') as stream:
     requirements = stream.read().splitlines()
 
 
-# Create configuration
-def configuration(parent_package='', top_path=None):
-    config = Configuration('namdtools', parent_package, top_path)
-    # config.add_data_dir(('_include', 'molecular/_include'))  # not sure why this wasn't working with manifest.in
-    return config
+# Cython code
+ext_modules = [
+    Extension('namdtools.io._read_utils', [os.path.join('namdtools', 'io', '_read_utils.pyx')],
+              include_dirs=[np.get_include()]),
+]
 
 
 # Setup
 setup(
-    # name='namdtools',
+    name='namdtools',
     version=version,
     author='C. Lockhart',
     author_email='clockha2@gmu.edu',
@@ -53,14 +51,7 @@ setup(
         'namdtools.io'
     ],
     install_requires=requirements,
-    # include_package_data=True,
-    configuration=configuration,
+    include_package_data=True,
     zip_safe=True,
-    ext_modules=cythonize([
-        Extension(
-            'namdtools.io._read_utils',
-            sources=[os.path.join('namdtools', 'io', '_read_utils.pyx')],
-            include_dirs=[np.get_include()]
-        ),
-    ]),
+    ext_modules=cythonize(ext_modules),
 )
