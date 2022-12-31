@@ -2,16 +2,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
-
-# Read version
-with open('../../version.yml', 'r') as f:
-    data = f.read().splitlines()
-version_dict = dict([element.split(': ') for element in data])  # noqa
-
-# Convert the version_data to a string (add 1 for current build)
-# version = '{0}.{1}.{2}'.format(version_dict['major'], version_dict['minor'], int(version_dict['micro']) + 1)
-version = '{0}.{1}.{2}'.format(version_dict['major'], version_dict['minor'], version_dict['micro'])
-print(version)
+import namdtools
 
 # Project information
 project = 'namdtools'
@@ -19,7 +10,7 @@ copyright = '2020, Lockhart Lab'
 author = 'C. Lockhart'
 
 # The full version, including alpha/beta/rc tags
-release = version
+release = namdtools.__version__
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
