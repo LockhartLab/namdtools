@@ -133,7 +133,11 @@ def _read_log(fname, usecols=None):
     if usecols is not None:
         usecols = np.array(usecols)
         if issubclass(usecols.dtype.type, str):
-            usecols = np.flatnonzero(np.in1d(etitle, usecols))
+            candidate_usecols = np.flatnonzero(np.in1d(etitle, usecols))
+            if np.sum(candidate_usecols) != len(usecols):
+                missing = usecols[np.flatnonzero(np.in1d(usecols, etitle))]
+                raise AttributeError(f'columns {missing} not found')
+            usecols = candidate_usecols  # accept candidate
     else:
         usecols = np.arange(len(etitle))
 
