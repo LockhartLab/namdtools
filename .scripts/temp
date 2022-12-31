@@ -1,0 +1,16 @@
+
+    - name: Make documentation
+      run: |
+        cd docs
+        rm -rf source/api/generated
+        rm -rf build
+        make clean
+        make html
+
+    - name: Sync with github
+      run: |
+        git config --local user.name "github-actions"
+        git config --local user.email "github-actions@github.com"
+        git add -A
+        git commit --amend --no-edit
+        git push -f

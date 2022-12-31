@@ -24,3 +24,6 @@ __all__.extend(io.__all__)
 
 # this.charmrun = None
 # this.namd = 'namd2'
+
+from . import _version
+__version__ = _version.get_versions()['version']

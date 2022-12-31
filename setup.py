@@ -7,16 +7,9 @@ author: C. Lockhart <chris@lockhartlab.org>
 import numpy as np
 import os.path
 from setuptools import Extension, setup
+import versioneer
 
 from Cython.Build import cythonize
-
-# Read version
-with open('version.yml', 'r') as f:
-    data = f.read().splitlines()
-version_dict = dict([element.split(': ') for element in data])
-
-# Convert the version_data to a string
-version = '.'.join([str(version_dict[key]) for key in ['major', 'minor', 'micro']])
 
 # Read in long description
 with open('README.rst', 'r') as stream:
@@ -37,7 +30,8 @@ ext_modules = [
 # Setup
 setup(
     name='namdtools',
-    version=version,
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     author='C. Lockhart',
     author_email='clockha2@gmu.edu',
     description='A Python interface to NAMD',
