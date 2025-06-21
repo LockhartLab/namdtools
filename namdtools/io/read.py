@@ -130,11 +130,12 @@ def _read_log(fname, usecols=None):
     etitle = _parse_etitle(fname)
 
     # Convert usecols to integer if collection of strings
+    # FIXME I don't think that usecols works
     if usecols is not None:
         usecols = np.array(usecols)
         if issubclass(usecols.dtype.type, str):
             candidate_usecols = np.flatnonzero(np.in1d(etitle, usecols))
-            if np.sum(candidate_usecols) != len(usecols):
+            if len(candidate_usecols) != len(usecols):
                 missing = usecols[np.flatnonzero(np.in1d(usecols, etitle))]
                 raise AttributeError(f'columns {missing} not found')
             usecols = candidate_usecols  # accept candidate
