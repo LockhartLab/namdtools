@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>namdtools.core.core &#8212; namdtools 0.2.3.post0.dev7 documentation</title>
+    <title>namdtools.core.core &#8212; namdtools 0.2.3.post0.dev9 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/nature.css?v=279e0f84" />
-    <script src="../../../_static/documentation_options.js?v=01806b21"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="stylesheet" type="text/css" href="../../../_static/nature.css?v=8fc2db88" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=adb8673e"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.3.post0.dev7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.3.post0.dev9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.core.core</a></li> 
       </ul>
@@ -154,17 +154,13 @@
 
 
 <span class="c1"># NAMD controller</span>
-<div class="viewcode-block" id="NAMD">
-<a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">NAMD</span><span class="p">:</span>
+<div class="viewcode-block" id="NAMD"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">NAMD</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Controls NAMD with Python.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Initialize class instance</span>
-<div class="viewcode-block" id="NAMD.__init__">
-<a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">executable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="NAMD.__init__"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.__init__">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configuration_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">executable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the NAMD runner.</span>
 
@@ -202,7 +198,6 @@
         <span class="c1"># Job monitoring variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_wait</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">wait</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="o">=</span> <span class="kc">None</span></div>
-
 
     <span class="c1"># Get the configuration path</span>
     <span class="nd">@property</span>
@@ -283,9 +278,7 @@
         <span class="c1"># Return pid</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">pid</span>
 
-<div class="viewcode-block" id="NAMD.poll">
-<a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.poll">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NAMD.poll"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.poll">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">poll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if NAMD is still running.</span>
 
@@ -296,7 +289,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span></div>
-
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">log_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -313,9 +305,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span> <span class="o">=</span> <span class="n">log_path</span>
 
     <span class="c1"># Start simulations</span>
-<div class="viewcode-block" id="NAMD.start">
-<a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.start">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NAMD.start"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.NAMD.html#namdtools.core.core.NAMD.start">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start NAMD simulation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -333,7 +323,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">NAMDError</span><span class="p">(</span><span class="s1">&#39;NAMD job did not finish successfully&#39;</span><span class="p">)</span></div>
-
 
     <span class="c1"># Stop simulations</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -364,11 +353,8 @@
         <span class="k">return</span> <span class="n">status</span></div>
 
 
-
 <span class="c1"># Run namd on configuration file and write to log file</span>
-<div class="viewcode-block" id="run_namd">
-<a class="viewcode-back" href="../../../api/generated/namdtools.core.core.run_namd.html#namdtools.core.core.run_namd">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">run_namd</span><span class="p">(</span><span class="n">configuration_file</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="run_namd"><a class="viewcode-back" href="../../../api/generated/namdtools.core.core.run_namd.html#namdtools.core.core.run_namd">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">run_namd</span><span class="p">(</span><span class="n">configuration_file</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run NAMD on `configuration_file` and write to `log_file`.</span>
 
@@ -399,7 +385,6 @@
 
     <span class="c1"># Return</span>
     <span class="k">return</span> <span class="n">job</span></div>
-
 
 
 <span class="c1"># Extract energy from log file</span>
@@ -499,9 +484,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
@@ -509,26 +494,26 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.3.post0.dev7 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">namdtools 0.2.3.post0.dev9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.core.core</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2020, Lockhart Lab.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     </div>
   </body>
 </html>

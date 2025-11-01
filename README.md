@@ -7,7 +7,6 @@ http://www.ks.uiuc.edu/Research/namd/
 <span style="white-space: nowrap;">
     <a href="https://pypi.org/project/namdtools/"><img src="https://img.shields.io/pypi/v/namdtools" /></a>
     <a href="https://travis-ci.com/github/LockhartLab/namdtools"><img src="https://img.shields.io/travis/com/lockhartlab/namdtools/master" /></a>
-    <a href="https://codecov.io/gh/LockhartLab/namdtools"><img src="https://img.shields.io/codecov/c/github/lockhartlab/namdtools/master" /></a>
 </span>
 
 <hr>
