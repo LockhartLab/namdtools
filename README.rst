@@ -12,13 +12,6 @@ http://www.ks.uiuc.edu/Research/namd/
 .. image:: https://img.shields.io/pypi/v/namdtools
    :target: https://pypi.org/project/namdtools/
 
-.. image:: https://img.shields.io/codecov/c/github/clockhart/namdtools/master
-   :target: https://codecov.io/gh/clockhart/namdtools
-
-..
-   *dev:*
-   <nobr><img src="https://img.shields.io/travis/com/lockhartlab/molecular/dev"  alt="build-status-dev"/></nobr>
-   <nobr><img src="https://img.shields.io/codecov/c/github/lockhartlab/molecular/dev" alt="coverage-dev"/></nobr>
 
 note that this package is **still in development**
 at this stage, I'm only building thing as they come to mind  
