@@ -1,7 +1,6 @@
 Cython
 numpy
 pandas
-pathogen
 pyyaml>=5.3
 scipy
 sympy

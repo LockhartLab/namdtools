@@ -5,12 +5,12 @@ author: C. Lockhart <clockha2@gmu.edu>
 """
 
 from namdtools.core import Log
-
+from namdtools.io.path import Path, vglob
 
 # Read output from NAMD run
 # Convert to object? Store raw output?
 def read_log(fname, glob=None, usecols=None):
-    """
+    r"""
     Read output from NAMD.
 
     Parameters
@@ -18,7 +18,7 @@ def read_log(fname, glob=None, usecols=None):
     fname : str
         Name of NAMD output file.
     glob : bool or dict
-        Does `fname` need to be globbed? If a boolean, uses :ref:`glob`. If dictionary, uses :ref:`vglob`.
+        Does `fname` need to be globbed? If a boolean, uses `glob`. If dictionary, uses `vglob`.
         (Default: None)
     usecols : list-like or callable
         (Optional) Specify columns to return.
@@ -34,8 +34,6 @@ def read_log(fname, glob=None, usecols=None):
 
     # If glob, change fname to include all globbed files
     if glob:
-        from pathogen import Path, vglob  #
-
         # Convert glob to a empty dictionary if necessary
         if not isinstance(glob, dict):
             glob = {}
