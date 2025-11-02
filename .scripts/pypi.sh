@@ -5,5 +5,6 @@ python setup.py sdist bdist_wheel
 twine check dist/*
 twine upload dist/*
 
-rm -r __pycache__
+find . -type d -name "__pycache__" -exec rm -r -v {} +
 rm -r *.egg-info
+rm -r dist
