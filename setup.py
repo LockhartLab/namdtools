@@ -1,8 +1,3 @@
-"""
-setup.py
-written in Python3
-author: C. Lockhart <chris@lockhartlab.org>
-"""
 
 import numpy as np
 import os.path
@@ -41,7 +36,6 @@ setup(
     packages=[
         'namdtools',
         'namdtools.analysis',
-        'namdtools.core',
         'namdtools.io'
     ],
     install_requires=requirements,
