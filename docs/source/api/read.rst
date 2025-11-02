@@ -1,7 +1,7 @@
-namdtools.io
-============
+namdtools.read
+==============
 
-.. currentmodule:: namdtools.io
+.. currentmodule:: namdtools.read
    
 Functions
 ~~~~~~~~~
