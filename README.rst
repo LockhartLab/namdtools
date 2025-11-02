@@ -1,4 +1,8 @@
 
+.. image:: namdtools.svg
+   :alt: namdtools
+   :height: 200
+
 a Python interface to NAMD
 http://www.ks.uiuc.edu/Research/namd/
 

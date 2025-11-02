@@ -1,3 +1,8 @@
+"""
+pme.py
+written in Python3
+author: C. Lockhart <chrisblockhart@gmail.com>
+"""
 
 import numpy as np
 
