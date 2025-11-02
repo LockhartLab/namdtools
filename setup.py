@@ -7,7 +7,7 @@ import versioneer
 from Cython.Build import cythonize
 
 # Read in long description
-with open('README.rst', 'r') as stream:
+with open('README.md', 'r') as stream:
     long_description = stream.read()
 
 # Read in requirements.txt
