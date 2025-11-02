@@ -1,10 +1,7 @@
-"""
-read.py
-language: Python3
-author: C. Lockhart <clockha2@gmu.edu>
-"""
 
-from namdtools.core import Log
+from functools import partial
+import pandas as pd
+
 from namdtools.io.path import Path, vglob
 
 # Read output from NAMD run
@@ -25,12 +22,8 @@ def read_log(fname, glob=None, usecols=None):
 
     Returns
     -------
-    Log
+    DataFrame
     """
-
-    # Import to save time
-    from functools import partial
-    import pandas as pd
 
     # If glob, change fname to include all globbed files
     if glob:
@@ -65,7 +58,7 @@ def read_log(fname, glob=None, usecols=None):
     data = data[0] if len(data) == 1 else pd.concat(data, ignore_index=True)
 
     # Return
-    return Log(data)
+    return data
 
 
 # TODO make a Cython backend? Or a C backend? This is still slow.

@@ -1,4 +1,3 @@
-<img src="namdtools.svg" alt="namdtools" height="200px">
 
 a Python interface to NAMD  
 http://www.ks.uiuc.edu/Research/namd/
