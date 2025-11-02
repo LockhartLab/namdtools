@@ -30,7 +30,7 @@ setup(
     author='C. Lockhart',
     author_email='clockha2@gmu.edu',
     description='A Python interface to NAMD',
-    long_description=long_description,
+    # long_description=long_description,
     # long_description_content_type='text/markdown',
     url="https://www.lockhartlab.org",
     packages=[
