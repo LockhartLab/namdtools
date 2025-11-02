@@ -2,9 +2,6 @@
 namdtools
 =========
 
-.. image:: ../../namdtools.svg
-   :height: 200px
-
 .. toctree::
    :maxdepth: 1
 
