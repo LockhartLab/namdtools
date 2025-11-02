@@ -1,15 +1,15 @@
 import pandas as pd
 
 
-# Read output from NAMD run
+# Read NAMD log file
 def read_log(fname):
     r"""
-    Read output from NAMD.
+    Read NAMD log file.
 
     Parameters
     ----------
-    fname : str
-        Name of NAMD output file.
+    fname : :obj:`str`
+        Name of NAMD log file.
 
     Returns
     -------
@@ -31,6 +31,33 @@ def read_log(fname):
             if line.startswith("ENERGY"):
                 records.append(line.split()[1:])
 
+    # What if our file doesn't contain ETITLE?
+    # We can assume column headers based on what we know from NAMD
+    if columns is None:
+        if len(records[0]) != 20:
+            raise IOError("expecting 20 data elements in NAMD log file")
+        columns = [
+            "ts",
+            "bond",
+            "angle",
+            "dihed",
+            "imprp",
+            "elect",
+            "vdw",
+            "boundary",
+            "misc",
+            "kinetic",
+            "total",
+            "temp",
+            "potential",
+            "total3",
+            "tempavg",
+            "pressure",
+            "gpressure",
+            "volume",
+            "pressavg",
+            "gpressavg",
+        ]
+
     # Return
     return pd.DataFrame(records, columns=columns).set_index(columns[0]).astype(float)
-
