@@ -1,9 +1,3 @@
-"""
-pme.py
-written in Python3
-author: C. Lockhart <chrisblockhart@gmail.com>
-"""
-
 import numpy as np
 
 
@@ -45,5 +39,5 @@ def get_pme_size(a):
     return a
 
 
-if __name__ == '__main__':
-    print(get_pme_size(68.))
+if __name__ == "__main__":
+    print(get_pme_size(68.0))

@@ -1,2 +1,0 @@
-recursive-include namdtools *.c *.pyf *.f90 *.pyx *.yml
-include requirements.txt

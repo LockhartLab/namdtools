@@ -1,5 +1,4 @@
-Cython
 sphinx
 sphinx-copybutton
-wheel
+twine
 versioneer
