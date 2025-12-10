@@ -1,15 +1,17 @@
+from io import TextIOBase
+
 import pandas as pd
 
 
 # Read NAMD log file
-def read_log(fname):
+def read_log(log_file):
     r"""
     Read NAMD log file.
 
     Parameters
     ----------
-    fname : :obj:`str`
-        Name of NAMD log file.
+    fname : :obj:`str` or :obj:`TextIOBase`
+        Path or file-like object for the NAMD log file.
 
     Returns
     -------
@@ -20,16 +22,21 @@ def read_log(fname):
     columns = None
     records = []
 
-    # Read through log file and extract energy records
-    with open(fname, "r") as buf:
-        for line in buf:
-            # Read first ETITLE
-            if columns is None and line.startswith("ETITLE"):
-                columns = line.lower().split()[1:]
+    # Read log from either a file-like object or a file path
+    if isinstance(log_file, TextIOBase):
+        buf = log_file
+    else:
+        buf = open(log_file, "r", encoding="utf-8")
 
-            # Save each energy record
-            if line.startswith("ENERGY"):
-                records.append(line.split()[1:])
+    # Read through log file and extract energy records
+    for line in buf:
+        # Read first ETITLE
+        if columns is None and line.startswith("ETITLE"):
+            columns = line.lower().split()[1:]
+
+        # Save each energy record
+        if line.startswith("ENERGY"):
+            records.append(line.split()[1:])
 
     # What if our file doesn't contain ETITLE?
     # We can assume column headers based on what we know from NAMD
