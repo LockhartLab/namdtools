@@ -34,9 +34,8 @@ def read_log(fname):
     # What if our file doesn't contain ETITLE?
     # We can assume column headers based on what we know from NAMD
     if columns is None:
-        if len(records[0]) != 20:
-            raise IOError("expecting 20 data elements in NAMD log file")
-        columns = [
+        n = len(records[0])
+        base_columns = [
             "ts",
             "bond",
             "angle",
@@ -52,12 +51,13 @@ def read_log(fname):
             "potential",
             "total3",
             "tempavg",
-            "pressure",
-            "gpressure",
-            "volume",
-            "pressavg",
-            "gpressavg",
         ]
+        if n == 15:
+            columns = base_columns
+        elif n == 20:
+            columns = base_columns + ["pressure", "gpressure", "volume", "pressavg", "gpressavg"]
+        else:
+            raise IOError(f"expecting 15 or 20 data elements in NAMD log file, got {n}")
 
     # Return
     return pd.DataFrame(records, columns=columns).set_index(columns[0]).astype(float)
