@@ -1,42 +1,37 @@
-import pandas as pd
+from fpathlib import is_expandable
+import fpathlib.ext.polars as pl
 
 
 # Read NAMD log file
-def read_log(fname):
+def read_log(source, drop_etitle=True):
     r"""
     Read NAMD log file.
 
     Parameters
     ----------
-    fname : :obj:`str`
-        Name of NAMD log file.
+    source : :obj:`str`
+        Name of NAMD log file. 
+    drop_etitle : :obj:`bool`
+        Drop the first column of the log file, which is the title of the energy term. (Default: True).
 
     Returns
     -------
     DataFrame
     """
 
-    # Initialize log info
-    columns = None
-    records = []
+    # Read in logs in `source`
+    lf = pl.scan_txt(
+        source,
+        separator=r"\s+",
+        filter_expr=pl.col("line").str.starts_with("ENERGY"),
+    )
 
-    # Read through log file and extract energy records
-    with open(fname, "r") as buf:
-        for line in buf:
-            # Read first ETITLE
-            if columns is None and line.startswith("ETITLE"):
-                columns = line.lower().split()[1:]
-
-            # Save each energy record
-            if line.startswith("ENERGY"):
-                records.append(line.split()[1:])
-
-    # What if our file doesn't contain ETITLE?
-    # We can assume column headers based on what we know from NAMD
-    if columns is None:
-        if len(records[0]) != 20:
-            raise IOError("expecting 20 data elements in NAMD log file")
-        columns = [
+    # Change fields to appropriate header values
+    fields = lf.select(pl.col("^field_.*$")).collect_schema().names()
+    if len(fields) != 21:
+        raise IOError("expecting 21 fields in NAMD log file")
+    columns = [
+            "etitle",
             "ts",
             "bond",
             "angle",
@@ -58,6 +53,11 @@ def read_log(fname):
             "pressavg",
             "gpressavg",
         ]
+    lf = lf.rename(dict(zip(fields, columns)))
+
+    # Drop etitle?
+    if drop_etitle:
+        lf = lf.drop("etitle")
 
     # Return
-    return pd.DataFrame(records, columns=columns).set_index(columns[0]).astype(float)
+    return lf

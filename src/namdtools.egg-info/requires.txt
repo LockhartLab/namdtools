@@ -1,0 +1,10 @@
+fpathlib
+numpy
+pandas
+
+[dev]
+pytest
+black
+sphinx
+sphinx-copybutton
+twine

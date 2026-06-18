@@ -6,6 +6,3 @@ __all__ = [
     "read_log",
 ]
 
-from . import _version
-
-__version__ = _version.get_versions()["version"]

@@ -15,6 +15,7 @@ authors = [{ name="C. Lockhart", email="clockha2@gmu.edu" }]
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    "fpathlib",
     "numpy",
     "pandas",
 ]
