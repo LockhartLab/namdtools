@@ -1,4 +1,3 @@
-from fpathlib import is_expandable
 import fpathlib.ext.polars as pl
 
 
@@ -27,9 +26,6 @@ def read_log(source, drop_etitle=True):
     )
 
     # Change fields to appropriate header values
-    fields = lf.select(pl.col("^field_.*$")).collect_schema().names()
-    if len(fields) != 21:
-        raise IOError("expecting 21 fields in NAMD log file")
     columns = [
             "etitle",
             "ts",
@@ -53,6 +49,10 @@ def read_log(source, drop_etitle=True):
             "pressavg",
             "gpressavg",
         ]
+    fields = lf.select(pl.col("^field_.*$")).collect_schema().names()
+    n_fields = len(fields)
+    if n_fields == 16:
+        columns = columns[:16]
     lf = lf.rename(dict(zip(fields, columns)))
 
     # Drop etitle?
