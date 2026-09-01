@@ -1,10 +1,13 @@
 import fpathlib.ext.polars as pl
 
-
 # Read NAMD log file
 def read_log(source, drop_etitle=True):
+    return scan_log(source, drop_etitle).collect()
+
+# Scan NAMD log file
+def scan_log(source, drop_etitle=True):
     r"""
-    Read NAMD log file.
+    Scan NAMD log file.
 
     Parameters
     ----------
@@ -49,7 +52,7 @@ def read_log(source, drop_etitle=True):
             "pressavg",
             "gpressavg",
         ]
-    fields = lf.select(pl.col("^field_.*$")).collect_schema().names()
+    fields = lf.limit(1).select(pl.col("^field_.*$")).collect_schema().names()
     n_fields = len(fields)
     if n_fields == 16:
         columns = columns[:16]
