@@ -7,6 +7,8 @@ def read_log(source, drop_etitle=True):
     return scan_log(source, drop_etitle).collect()
 
 # Scan NAMD log file
+# TODO collect(engine="streaming") is necessary when there are many globbed filed in source
+# this could be fixed in the future.
 def scan_log(source, drop_etitle=True):
     r"""
     Scan NAMD log file.
