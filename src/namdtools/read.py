@@ -1,4 +1,6 @@
+from fpathlib import ExpandedFPath
 import fpathlib.ext.polars as pl
+
 
 # Read NAMD log file
 def read_log(source, drop_etitle=True):
@@ -29,7 +31,7 @@ def scan_log(source, drop_etitle=True):
     )
 
     lf0 = lf
-    if len(source) > 1:
+    if isinstance(source, ExpandedFPath):
         lf0 = pl.scan_txt(
             source[0],
             separator=r"\s+",
