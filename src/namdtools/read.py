@@ -28,6 +28,14 @@ def scan_log(source, drop_etitle=True):
         filter_expr=pl.col("line").str.starts_with("ENERGY"),
     )
 
+    lf0 = lf
+    if len(source) > 1:
+        lf0 = pl.scan_txt(
+            source[0],
+            separator=r"\s+",
+            filter_expr=pl.col("line").str.starts_with("ENERGY"),
+        )
+
     # Change fields to appropriate header values
     columns = [
             "etitle",
@@ -52,7 +60,7 @@ def scan_log(source, drop_etitle=True):
             "pressavg",
             "gpressavg",
         ]
-    fields = lf.limit(1).select(pl.col("^field_.*$")).collect_schema().names()
+    fields = lf0.select(pl.col("^field_.*$")).collect_schema().names()
     n_fields = len(fields)
     if n_fields == 16:
         columns = columns[:16]
