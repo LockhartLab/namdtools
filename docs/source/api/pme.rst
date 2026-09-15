@@ -1,13 +1,12 @@
-namdtools.read
+namdtools.pme
 ==============
 
-.. currentmodule:: namdtools.read
-   
+.. currentmodule:: namdtools.pme
+
 Functions
 ~~~~~~~~~
 
 .. autosummary::
    :toctree: generated
 
-   read_log
-   scan_log
+   get_pme_size
