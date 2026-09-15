@@ -37,7 +37,3 @@ def get_pme_size(a):
 
     # Return
     return a
-
-
-if __name__ == "__main__":
-    print(get_pme_size(68.0))
