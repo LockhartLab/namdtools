@@ -44,12 +44,11 @@ def test_read_log_columns():
 
 
 def test_read_log_values():
-    # fields are parsed as strings, not numeric types
     df = read_log(str(SAMPLE_16FIELD))
-    assert df["ts"].to_list() == ["0", "100"]
-    assert df["bond"].to_list() == ["10.0000", "11.0000"]
-    assert df["temp"].to_list() == ["300.0000", "301.0000"]
-    assert df["potential"].to_list() == ["-100.0000", "-99.5000"]
+    assert df["ts"].to_list() == [0, 100]
+    assert df["bond"].to_list() == pytest.approx([10.0, 11.0])
+    assert df["temp"].to_list() == pytest.approx([300.0, 301.0])
+    assert df["potential"].to_list() == pytest.approx([-100.0, -99.5])
 
 
 def test_scan_log_returns_lazyframe():
@@ -86,8 +85,8 @@ def test_read_log_21field_columns():
 
 def test_read_log_21field_values():
     df = read_log(str(SAMPLE_21FIELD))
-    assert df["ts"].to_list() == ["0", "100"]
-    assert df["volume"].to_list() == ["123456.0000", "123457.0000"]
+    assert df["ts"].to_list() == [0, 100]
+    assert df["volume"].to_list() == pytest.approx([123456.0, 123457.0])
 
 
 def test_read_log_rejects_unexpected_field_count():
