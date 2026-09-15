@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>namdtools.read.read_log &#8212; namdtools 0.4.3.dev4 documentation</title>
+    <title>namdtools.pme.get_pme_size &#8212; namdtools 0.4.3.dev4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/nature.css?v=279e0f84" />
     <script src="../../_static/documentation_options.js?v=44170b8a"></script>
@@ -13,8 +13,8 @@
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="namdtools.read.scan_log" href="namdtools.read.scan_log.html" />
-    <link rel="prev" title="namdtools.read" href="../read.html" /> 
+    <link rel="next" title="namdtools.read" href="../read.html" />
+    <link rel="prev" title="namdtools.pme" href="../pme.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
@@ -23,15 +23,15 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="namdtools.read.scan_log.html" title="namdtools.read.scan_log"
+          <a href="../read.html" title="namdtools.read"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../read.html" title="namdtools.read"
+          <a href="../pme.html" title="namdtools.pme"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.3.dev4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../api.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../read.html" accesskey="U">namdtools.read</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">namdtools.read.read_log</a></li> 
+          <li class="nav-item nav-item-2"><a href="../pme.html" accesskey="U">namdtools.pme</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.pme.get_pme_size</a></li> 
       </ul>
     </div>  
 
@@ -40,12 +40,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="namdtools-read-read-log">
-<h1>namdtools.read.read_log<a class="headerlink" href="#namdtools-read-read-log" title="Link to this heading">¶</a></h1>
+  <section id="namdtools-pme-get-pme-size">
+<h1>namdtools.pme.get_pme_size<a class="headerlink" href="#namdtools-pme-get-pme-size" title="Link to this heading">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="namdtools.read.read_log">
-<span class="sig-prename descclassname"><span class="pre">namdtools.read.</span></span><span class="sig-name descname"><span class="pre">read_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_etitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/namdtools/read.html#read_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#namdtools.read.read_log" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="namdtools.pme.get_pme_size">
+<span class="sig-prename descclassname"><span class="pre">namdtools.pme.</span></span><span class="sig-name descname"><span class="pre">get_pme_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/namdtools/pme.html#get_pme_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#namdtools.pme.get_pme_size" title="Link to this definition">¶</a></dt>
+<dd><p>Given a box length, figure out the grid size for PME. We are looking for the PME size that’s ~1 grid spacing, while
+with only small prime factors 2, 3, and 5.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (<em>numeric</em>) – Size of box length.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Size of PME grid length.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
@@ -59,8 +72,8 @@
   <div>
     <h3><a href="../../index.html">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#">namdtools.read.read_log</a><ul>
-<li><a class="reference internal" href="#namdtools.read.read_log"><code class="docutils literal notranslate"><span class="pre">read_log()</span></code></a></li>
+<li><a class="reference internal" href="#">namdtools.pme.get_pme_size</a><ul>
+<li><a class="reference internal" href="#namdtools.pme.get_pme_size"><code class="docutils literal notranslate"><span class="pre">get_pme_size()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -68,18 +81,18 @@
   </div>
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="../read.html"
-                          title="previous chapter">namdtools.read</a></p>
+    <p class="topless"><a href="../pme.html"
+                          title="previous chapter">namdtools.pme</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="namdtools.read.scan_log.html"
-                          title="next chapter">namdtools.read.scan_log</a></p>
+    <p class="topless"><a href="../read.html"
+                          title="next chapter">namdtools.read</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/api/generated/namdtools.read.read_log.rst.txt"
+      <li><a href="../../_sources/api/generated/namdtools.pme.get_pme_size.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -104,15 +117,15 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="namdtools.read.scan_log.html" title="namdtools.read.scan_log"
+          <a href="../read.html" title="namdtools.read"
              >next</a> |</li>
         <li class="right" >
-          <a href="../read.html" title="namdtools.read"
+          <a href="../pme.html" title="namdtools.pme"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.3.dev4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../api.html" >API Reference</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../read.html" >namdtools.read</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">namdtools.read.read_log</a></li> 
+          <li class="nav-item nav-item-2"><a href="../pme.html" >namdtools.pme</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.pme.get_pme_size</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

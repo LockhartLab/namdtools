@@ -41,12 +41,11 @@ autosummary_generate = True
 
 # Intersphinx parameters
 intersphinx_mapping = {
-    'matplotlib': ('https://matplotlib.org', None),
-    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+    'numpy': ('https://numpy.org/doc/stable/', None),
     'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
+    'polars': ('https://docs.pola.rs/api/python/stable/', None),
     'python': ('https://docs.python.org/3', None),
-    'scipy': ('http://docs.scipy.org/doc/scipy/reference', None),
-    'sklearn': ('http://scikit-learn.org/stable', (None, './_intersphinx/sklearn-objects.inv'))
+    'sympy': ('https://docs.sympy.org/latest/', None),
 }
 
 # Viewcode parameters

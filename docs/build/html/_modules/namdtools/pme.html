@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>namdtools.pme &#8212; namdtools 0.4.3.dev4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nature.css?v=279e0f84" />
+    <script src="../../_static/documentation_options.js?v=44170b8a"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.3.dev4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.pme</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for namdtools.pme</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<div class="viewcode-block" id="get_pme_size">
+<a class="viewcode-back" href="../../api/generated/namdtools.pme.get_pme_size.html#namdtools.pme.get_pme_size">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_pme_size</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Given a box length, figure out the grid size for PME. We are looking for the PME size that's ~1 grid spacing, while</span>
+<span class="sd">    with only small prime factors 2, 3, and 5.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : numeric</span>
+<span class="sd">        Size of box length.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Size of PME grid length.</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># To reduce runtime, import this here</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">sympy.ntheory</span><span class="w"> </span><span class="kn">import</span> <span class="n">factorint</span>
+
+    <span class="c1"># If a is a decimal, round up</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+    <span class="c1"># We want to find larger number that has only factors 2, 3, and 5</span>
+    <span class="c1"># noinspection PyShadowingNames</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_has_only_factors</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="n">factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">factorint</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
+            <span class="n">factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">factors</span> <span class="o">==</span> <span class="n">factor</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="c1"># Keep on increasing a until we find the right number</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">_has_only_factors</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Return</span>
+    <span class="k">return</span> <span class="n">a</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">get_pme_size</span><span class="p">(</span><span class="mf">68.0</span><span class="p">))</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.3.dev4 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">namdtools.pme</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2020, Lockhart Lab.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>
