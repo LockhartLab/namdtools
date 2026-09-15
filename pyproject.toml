@@ -18,6 +18,8 @@ dependencies = [
     "fpathlib",
     "numpy",
     "pandas",
+    "polars",
+    "sympy",
 ]
 
 [project.optional-dependencies]
