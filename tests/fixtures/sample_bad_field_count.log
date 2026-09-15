@@ -1,0 +1,2 @@
+ETITLE:      TS           BOND          ANGLE          DIHED          IMPRP               ELECT            VDW       BOUNDARY           MISC        KINETIC               TOTAL           TEMP         POTENTIAL         TOTAL3        TEMPAVG            EXTRA
+ENERGY:          0       10.0000       20.0000        5.0000        0.0000     -100.0000       15.0000        0.0000        0.0000       50.0000      -50.0000      300.0000     -100.0000      -50.0000      300.0000        1.0000
