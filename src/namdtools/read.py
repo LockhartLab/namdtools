@@ -7,8 +7,6 @@ def read_log(source, drop_etitle=True):
     return scan_log(source, drop_etitle).collect()
 
 # Scan NAMD log file
-# TODO collect(engine="streaming") is necessary when there are many globbed filed in source
-# this could be fixed in the future.
 def scan_log(source, drop_etitle=True):
     r"""
     Scan NAMD log file.
@@ -56,7 +54,7 @@ def scan_log(source, drop_etitle=True):
             "pressavg",
             "gpressavg",
         ]
-    fields = lf.head(1).select(pl.col("^field_.*$")).collect(engine="streaming").schema.names()
+    fields = [name for name in lf.collect_schema().names() if name.startswith("field_")]
     n_fields = len(fields)
     if n_fields == 16:
         columns = columns[:16]
