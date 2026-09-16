@@ -3,7 +3,8 @@
 .hypothesis/
 .hypothesis/*
 /.idea/
-/namdtools.egg-info/
+*.egg-info/
+src/namdtools/_version.py
 __pycache__/
 __pycache__/*
 /_scripts/
