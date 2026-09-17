@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>namdtools.read &#8212; namdtools 0.4.3.dev4 documentation</title>
+    <title>namdtools.read &#8212; namdtools 0.4.5.dev0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/nature.css?v=279e0f84" />
-    <script src="../../_static/documentation_options.js?v=44170b8a"></script>
+    <script src="../../_static/documentation_options.js?v=4d0b66f3"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -19,7 +19,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.3.dev4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.5.dev0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.read</a></li> 
       </ul>
@@ -31,8 +31,9 @@
           <div class="body" role="main">
             
   <h1>Source code for namdtools.read</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fpathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExpandedFPath</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fpathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">iexpand_fpath</span><span class="p">,</span> <span class="n">is_expandable</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">fpathlib.ext.polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">iglob</span>
 
 
 <span class="c1"># Read NAMD log file</span>
@@ -43,8 +44,6 @@
 
 
 <span class="c1"># Scan NAMD log file</span>
-<span class="c1"># TODO collect(engine="streaming") is necessary when there are many globbed filed in source</span>
-<span class="c1"># this could be fixed in the future.</span>
 <div class="viewcode-block" id="scan_log">
 <a class="viewcode-back" href="../../api/generated/namdtools.read.scan_log.html#namdtools.read.scan_log">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">scan_log</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">drop_etitle</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -54,7 +53,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    source : :obj:`str`</span>
-<span class="sd">        Name of NAMD log file. </span>
+<span class="sd">        Name of NAMD log file.</span>
 <span class="sd">    drop_etitle : :obj:`bool`</span>
 <span class="sd">        Drop the first column of the log file, which is the title of the energy term. (Default: True).</span>
 
@@ -63,13 +62,29 @@
 <span class="sd">    DataFrame</span>
 <span class="sd">    """</span>
 
-    <span class="c1"># Read in logs in `source`</span>
+    <span class="c1"># Is `source` expandable or globable?</span>
+    <span class="n">first_source</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">is_expandable</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
+        <span class="n">first_source</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iexpand_fpath</span><span class="p">(</span><span class="n">source</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">first_source</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iglob</span><span class="p">(</span><span class="n">source</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Scan `source`</span>
     <span class="n">lf</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">scan_txt</span><span class="p">(</span>
         <span class="n">source</span><span class="p">,</span>
         <span class="n">separator</span><span class="o">=</span><span class="sa">r</span><span class="s2">"\s+"</span><span class="p">,</span>
         <span class="n">filter_expr</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"line"</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"ENERGY"</span><span class="p">),</span>
     <span class="p">)</span>
-    
+
+    <span class="c1"># Scan `first_source` if it exists</span>
+    <span class="n">lf0</span> <span class="o">=</span> <span class="n">lf</span>
+    <span class="k">if</span> <span class="n">first_source</span><span class="p">:</span>
+        <span class="n">lf0</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">scan_txt</span><span class="p">(</span>
+            <span class="n">first_source</span><span class="p">,</span>
+            <span class="n">separator</span><span class="o">=</span><span class="sa">r</span><span class="s2">"\s+"</span><span class="p">,</span>
+            <span class="n">filter_expr</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"line"</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"ENERGY"</span><span class="p">),</span>
+        <span class="p">)</span>
+
     <span class="c1"># Change fields to appropriate header values</span>
     <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">"etitle"</span><span class="p">,</span>
@@ -94,7 +109,7 @@
             <span class="s2">"pressavg"</span><span class="p">,</span>
             <span class="s2">"gpressavg"</span><span class="p">,</span>
         <span class="p">]</span>
-    <span class="n">fields</span> <span class="o">=</span> <span class="n">lf</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"^field_.*$"</span><span class="p">))</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="s2">"streaming"</span><span class="p">)</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">lf0</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"^field_.*$"</span><span class="p">))</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">engine</span><span class="o">=</span><span class="s2">"streaming"</span><span class="p">)</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">names</span><span class="p">()</span>
     <span class="n">n_fields</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n_fields</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
         <span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[:</span><span class="mi">16</span><span class="p">]</span>
@@ -138,7 +153,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.3.dev4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.5.dev0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.read</a></li> 
       </ul>
