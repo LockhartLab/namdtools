@@ -8,7 +8,7 @@ def read_log(source, drop_etitle=True):
     return scan_log(source, drop_etitle).collect()
 
 # Scan NAMD log file
-def scan_log(source, drop_etitle=True):
+def scan_log(source, drop_etitle=True, validate_schema=True):
     r"""
     Scan NAMD log file.
 
@@ -18,6 +18,8 @@ def scan_log(source, drop_etitle=True):
         Name of NAMD log file.
     drop_etitle : :obj:`bool`
         Drop the first column of the log file, which is the title of the energy term. (Default: True).
+    validate_schema : :obj:`bool`
+        Validate the schema of the log file. (Default: True).
 
     Returns
     -------
@@ -36,6 +38,7 @@ def scan_log(source, drop_etitle=True):
         source,
         separator=r"\s+",
         filter_expr=pl.col("line").str.starts_with("ENERGY"),
+        validate_schema=validate_schema,
     )
 
     # Scan `first_source` if it exists
@@ -45,6 +48,7 @@ def scan_log(source, drop_etitle=True):
             first_source,
             separator=r"\s+",
             filter_expr=pl.col("line").str.starts_with("ENERGY"),
+            validate_schema=validate_schema,
         )
 
     # Change fields to appropriate header values
