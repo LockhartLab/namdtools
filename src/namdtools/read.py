@@ -1,5 +1,6 @@
-from fpathlib import ExpandedFPath
+from fpathlib import iexpand_fpath, is_expandable
 import fpathlib.ext.polars as pl
+from glob import iglob
 
 
 # Read NAMD log file
@@ -14,7 +15,7 @@ def scan_log(source, drop_etitle=True):
     Parameters
     ----------
     source : :obj:`str`
-        Name of NAMD log file. 
+        Name of NAMD log file.
     drop_etitle : :obj:`bool`
         Drop the first column of the log file, which is the title of the energy term. (Default: True).
 
@@ -23,13 +24,29 @@ def scan_log(source, drop_etitle=True):
     DataFrame
     """
 
-    # Read in logs in `source`
+    # Is `source` expandable or globable?
+    first_source = None
+    if is_expandable(source):
+        first_source = next(iexpand_fpath(source), None)
+    else:
+        first_source = next(iglob(source), None)
+
+    # Scan `source`
     lf = pl.scan_txt(
         source,
         separator=r"\s+",
         filter_expr=pl.col("line").str.starts_with("ENERGY"),
     )
-    
+
+    # Scan `first_source` if it exists
+    lf0 = lf
+    if first_source:
+        lf0 = pl.scan_txt(
+            first_source,
+            separator=r"\s+",
+            filter_expr=pl.col("line").str.starts_with("ENERGY"),
+        )
+
     # Change fields to appropriate header values
     columns = [
             "etitle",
@@ -54,7 +71,7 @@ def scan_log(source, drop_etitle=True):
             "pressavg",
             "gpressavg",
         ]
-    fields = [name for name in lf.collect_schema().names() if name.startswith("field_")]
+    fields = lf0.head(1).select(pl.col("^field_.*$")).collect(engine="streaming").schema.names()
     n_fields = len(fields)
     if n_fields == 16:
         columns = columns[:16]
