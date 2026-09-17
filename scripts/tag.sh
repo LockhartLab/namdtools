@@ -23,7 +23,10 @@ fi
 tag="${parts[0]}.${parts[1]}.${parts[2]}"
 
 git add -A
-git commit -m "tag $tag"
+if ! git diff --cached --quiet
+then
+  git commit -m "tag $tag"
+fi
 git push origin main
 
 git checkout main
