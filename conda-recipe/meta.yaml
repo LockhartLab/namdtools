@@ -1,5 +1,5 @@
 {% set name = "namdtools" %}
-{% set version = "0.4.4" %}
+{% set version = "0.4.5" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/namdtools-{{ version }}.tar.gz
-  sha256: c9a2eee17cd4a0856b1a0ad888099864923d1517a2c9e54b24c4d8680593f46b
+  sha256: aebd70586282903ae5fbf2645cd68cce1285ef43d05efe61ee7797d70a812b4d
 
 build:
   noarch: python
