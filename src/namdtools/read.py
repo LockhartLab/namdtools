@@ -4,11 +4,11 @@ from glob import iglob
 
 
 # Read NAMD log file
-def read_log(source, drop_etitle=True):
-    return scan_log(source, drop_etitle).collect()
+def read_log(source, drop_etitle=True, **kwargs):
+    return scan_log(source, drop_etitle, **kwargs).collect()
 
 # Scan NAMD log file
-def scan_log(source, drop_etitle=True, validate_schema=True):
+def scan_log(source, drop_etitle=True, **kwargs):
     r"""
     Scan NAMD log file.
 
@@ -18,16 +18,17 @@ def scan_log(source, drop_etitle=True, validate_schema=True):
         Name of NAMD log file.
     drop_etitle : :obj:`bool`
         Drop the first column of the log file, which is the title of the energy term. (Default: True).
-    validate_schema : :obj:`bool`
-        Validate the schema of the log file. (Default: True).
+    **kwargs
+        Additional keyword arguments passed to :func:`fpathlib.ext.polars.scan_txt`.
 
     Returns
     -------
     DataFrame
     """
 
+    kwargs.setdefault("include_file_paths", "fname")
+
     # Is `source` expandable or globable?
-    first_source = None
     if is_expandable(source):
         first_source = next(iexpand(source), None)
     else:
@@ -38,8 +39,7 @@ def scan_log(source, drop_etitle=True, validate_schema=True):
         source,
         separator=r"\s+",
         line_filter=lambda line: line.str.starts_with("ENERGY"),
-        include_file_paths="fname",
-        validate_schema=validate_schema,
+        **kwargs,
     )
 
     # Scan `first_source` if it exists
@@ -49,8 +49,7 @@ def scan_log(source, drop_etitle=True, validate_schema=True):
             first_source,
             separator=r"\s+",
             line_filter=lambda line: line.str.starts_with("ENERGY"),
-            include_file_paths="fname",
-            validate_schema=validate_schema,
+            **kwargs,
         )
 
     # Change fields to appropriate header values
