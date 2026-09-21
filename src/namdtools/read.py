@@ -26,8 +26,6 @@ def scan_log(source, drop_etitle=True, **kwargs):
     DataFrame
     """
 
-    kwargs.setdefault("include_file_paths", "fname")
-
     # Is `source` expandable or globable?
     if is_expandable(source):
         first_source = next(iexpand(source), None)

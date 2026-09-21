@@ -24,7 +24,6 @@ def test_read_log_keeps_etitle_when_requested():
 def test_read_log_columns():
     df = read_log(str(SAMPLE_16FIELD))
     assert set(df.columns) == {
-        "fname",
         "ts",
         "bond",
         "angle",
@@ -43,6 +42,15 @@ def test_read_log_columns():
     }
 
 
+def test_read_log_include_file_paths_is_opt_in():
+    df = read_log(str(SAMPLE_16FIELD))
+    assert "fname" not in df.columns
+
+    df = read_log(str(SAMPLE_16FIELD), include_file_paths="fname")
+    assert "fname" in df.columns
+    assert set(df["fname"].to_list()) == {str(SAMPLE_16FIELD)}
+
+
 def test_read_log_values():
     df = read_log(str(SAMPLE_16FIELD))
     assert df["ts"].to_list() == [0, 100]
@@ -59,7 +67,6 @@ def test_scan_log_returns_lazyframe():
 def test_read_log_21field_columns():
     df = read_log(str(SAMPLE_21FIELD))
     assert set(df.columns) == {
-        "fname",
         "ts",
         "bond",
         "angle",
