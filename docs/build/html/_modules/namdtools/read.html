@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>namdtools.read &#8212; namdtools 0.4.5 documentation</title>
+    <title>namdtools.read &#8212; namdtools 0.4.7.dev1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/nature.css?v=279e0f84" />
-    <script src="../../_static/documentation_options.js?v=340bb9e5"></script>
+    <script src="../../_static/documentation_options.js?v=0c87cd9f"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -19,7 +19,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.7.dev1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.read</a></li> 
       </ul>
@@ -31,7 +31,7 @@
           <div class="body" role="main">
             
   <h1>Source code for namdtools.read</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fpathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">iexpand_fpath</span><span class="p">,</span> <span class="n">is_expandable</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fpathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">iexpand</span><span class="p">,</span> <span class="n">is_expandable</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">fpathlib.ext.polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">glob</span><span class="w"> </span><span class="kn">import</span> <span class="n">iglob</span>
 
@@ -39,14 +39,14 @@
 <span class="c1"># Read NAMD log file</span>
 <div class="viewcode-block" id="read_log">
 <a class="viewcode-back" href="../../api/generated/namdtools.read.read_log.html#namdtools.read.read_log">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_log</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">drop_etitle</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">scan_log</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">drop_etitle</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span></div>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_log</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">drop_etitle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">scan_log</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">drop_etitle</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span></div>
 
 
 <span class="c1"># Scan NAMD log file</span>
 <div class="viewcode-block" id="scan_log">
 <a class="viewcode-back" href="../../api/generated/namdtools.read.scan_log.html#namdtools.read.scan_log">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">scan_log</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">drop_etitle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">validate_schema</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">scan_log</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">drop_etitle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""</span>
 <span class="sd">    Scan NAMD log file.</span>
 
@@ -56,8 +56,8 @@
 <span class="sd">        Name of NAMD log file.</span>
 <span class="sd">    drop_etitle : :obj:`bool`</span>
 <span class="sd">        Drop the first column of the log file, which is the title of the energy term. (Default: True).</span>
-<span class="sd">    validate_schema : :obj:`bool`</span>
-<span class="sd">        Validate the schema of the log file. (Default: True).</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to :func:`fpathlib.ext.polars.scan_txt`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -65,9 +65,8 @@
 <span class="sd">    """</span>
 
     <span class="c1"># Is `source` expandable or globable?</span>
-    <span class="n">first_source</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">is_expandable</span><span class="p">(</span><span class="n">source</span><span class="p">):</span>
-        <span class="n">first_source</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iexpand_fpath</span><span class="p">(</span><span class="n">source</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">first_source</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iexpand</span><span class="p">(</span><span class="n">source</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">first_source</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iglob</span><span class="p">(</span><span class="n">source</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 
@@ -75,8 +74,8 @@
     <span class="n">lf</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">scan_txt</span><span class="p">(</span>
         <span class="n">source</span><span class="p">,</span>
         <span class="n">separator</span><span class="o">=</span><span class="sa">r</span><span class="s2">"\s+"</span><span class="p">,</span>
-        <span class="n">filter_expr</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"line"</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"ENERGY"</span><span class="p">),</span>
-        <span class="n">validate_schema</span><span class="o">=</span><span class="n">validate_schema</span><span class="p">,</span>
+        <span class="n">line_filter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"ENERGY"</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Scan `first_source` if it exists</span>
@@ -85,8 +84,8 @@
         <span class="n">lf0</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">scan_txt</span><span class="p">(</span>
             <span class="n">first_source</span><span class="p">,</span>
             <span class="n">separator</span><span class="o">=</span><span class="sa">r</span><span class="s2">"\s+"</span><span class="p">,</span>
-            <span class="n">filter_expr</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"line"</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"ENERGY"</span><span class="p">),</span>
-            <span class="n">validate_schema</span><span class="o">=</span><span class="n">validate_schema</span><span class="p">,</span>
+            <span class="n">line_filter</span><span class="o">=</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">starts_with</span><span class="p">(</span><span class="s2">"ENERGY"</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># Change fields to appropriate header values</span>
@@ -157,7 +156,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.5 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">namdtools 0.4.7.dev1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">namdtools.read</a></li> 
       </ul>
