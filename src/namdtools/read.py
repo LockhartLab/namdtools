@@ -1,4 +1,4 @@
-from fpathlib import iexpand_fpath, is_expandable
+from fpathlib import iexpand, is_expandable
 import fpathlib.ext.polars as pl
 from glob import iglob
 
@@ -29,7 +29,7 @@ def scan_log(source, drop_etitle=True, validate_schema=True):
     # Is `source` expandable or globable?
     first_source = None
     if is_expandable(source):
-        first_source = next(iexpand_fpath(source), None)
+        first_source = next(iexpand(source), None)
     else:
         first_source = next(iglob(source), None)
 
@@ -37,7 +37,8 @@ def scan_log(source, drop_etitle=True, validate_schema=True):
     lf = pl.scan_txt(
         source,
         separator=r"\s+",
-        filter_expr=pl.col("line").str.starts_with("ENERGY"),
+        line_filter=lambda line: line.str.starts_with("ENERGY"),
+        include_file_paths="fname",
         validate_schema=validate_schema,
     )
 
@@ -47,7 +48,8 @@ def scan_log(source, drop_etitle=True, validate_schema=True):
         lf0 = pl.scan_txt(
             first_source,
             separator=r"\s+",
-            filter_expr=pl.col("line").str.starts_with("ENERGY"),
+            line_filter=lambda line: line.str.starts_with("ENERGY"),
+            include_file_paths="fname",
             validate_schema=validate_schema,
         )
 
